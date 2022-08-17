@@ -7,13 +7,13 @@
 #' @param k A parameter in hypothesis test that kth smallest treatment effect is less or equal to c
 #' @param method.list.all A list that contains the method of the rank scores. If you use the same methods across all strata, method.list.all will only include 1 element stating that score. Otherwise, method.list.all[[s]] should be the method for stratum s. Available score functions: Wilcoxon, list(name = "Wilcoxon); Stephenson, list(name = "Stephenson", s = ?).  
 #' @param opt.method Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.
-#' @param ties A subvector of c("upper", "lower", "random") indicating which tie-dealing methods we use to calculate statistics
+#' @param ties A subvector of c("upper", "lower", "fix") indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function.
 #' @import Rcpp
 #' @import RcppArmadillo
 
 #' @export
 
-min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greedy", ties = c("upper", "lower", "random")){
+min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greedy", ties = c("upper", "lower", "fix")){
   if(opt.method %in% c("LP_gurobi", "ILP_gurobi","PWL_gurobi","PWLint_gurobi")){
     if(!require(gurobi)){
       return(warning(" Gurobi should be installed before corresponding methods can be used. ", call. = FALSE))
@@ -139,16 +139,7 @@ min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greed
     }
     output$lower = stat
   }
-  if("random" %in% ties){
-    comb = cbind(Z, Y, block)
-    shuffle = sample(1:N, N)
-    comb = comb[shuffle, ]
-    comb = comb[order(comb[,2]),]
-    
-    Z3 = comb[,1]
-    Y3 = comb[,2]
-    block3 = comb[,3]
-    
+  if("fix" %in% ties){
     coeflist = test_stat_matrix_block(Z, Y, block, c, method.list.all)
     if(opt.method == "Greedy"){
       for(i in 1:length(coeflist)){
@@ -189,7 +180,7 @@ min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greed
     if(opt.method == "PWLint_gurobi"){
       stat = Gurobi_sol_PL(coeflist, N-k)$obj
     }
-    output$random = stat
+    output$fix = stat
   }
   return(output)
 }

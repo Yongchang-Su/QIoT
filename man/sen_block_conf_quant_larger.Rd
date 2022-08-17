@@ -11,6 +11,7 @@ sen_block_conf_quant_larger(
   method.list.all = NULL,
   Gam,
   opt.method = "Greedy",
+  ties = "fix",
   switch = FALSE,
   null.max = 10^5,
   alpha = 0.1
@@ -28,6 +29,8 @@ sen_block_conf_quant_larger(
 \item{Gam}{A parameter for sensitivity analysis}
 
 \item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.}
+
+\item{ties}{ties = "upper", "lower" or "fix". It indicates which tie-dealing methods we use to calculate statistics.}
 
 \item{switch}{Logical variable. If true, the function uses switching treatment and control trick when calculating p-value.}
 

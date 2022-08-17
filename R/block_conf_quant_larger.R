@@ -6,13 +6,14 @@
 #' @param block A factor vector indicates to which blocks the units belong. 
 #' @param method.list.all A list that contains the method of the rank scores. It might vary among different blocks
 #' @param opt.method Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.
+#' @param ties ties = "upper", "lower" or "fix". It indicates which tie-dealing methods we use to calculate statistics.
 #' @param stat.null Optional variable. You can enter the null distribution here by yourself. Otherwise it will be generated within the function.
 #' @param switch Logical variable. If true, the function uses switching treatment and control trick when calculating p-value.
 #' @param null.max The total amount of values we use to approximate the null distribution.
 #' @param alpha scalar. It equals to 1-confidence of the confidence region
 #' @export
 
-block_conf_quant_larger <- function(Z, Y, block, method.list.all = NULL, opt.method = 'Greedy', stat.null = NULL, switch = FALSE, null.max = 10^5,  alpha = 0.1){
+block_conf_quant_larger <- function(Z, Y, block, method.list.all = NULL, opt.method = 'Greedy', ties = "fix", stat.null = NULL, switch = FALSE, null.max = 10^5,  alpha = 0.1){
   if(!is.factor(block)){
     block = as.factor(block)
   } 
@@ -51,20 +52,20 @@ block_conf_quant_larger <- function(Z, Y, block, method.list.all = NULL, opt.met
   cmid = (cup+cdown)/2
   
   for(k in n:(n-mn)){
-    up = min_stat_block(Z,Y,block,k,cdown,method.list.all,opt.method, ties = "upper")$upper
+    up = unlist(min_stat_block(Z,Y,block,k,cdown,method.list.all,opt.method, ties))
     if(up>thres & k!= n){
       c_conf1[k] = cmid
       next
     }
     cdown = min(Y[Z==1]) - max(Y[Z==0]) - 0.01
-    up = min_stat_block(Z,Y,block,k,cdown,method.list.all,opt.method, ties = "upper")$upper
+    up = unlist(min_stat_block(Z,Y,block,k,cdown,method.list.all,opt.method, ties))
     if(up<thres){
       c_conf1[1:k] = -Inf
       break
     }else{
       repeat{
         cmid = (cup+cdown)/2 
-        mid = min_stat_block(Z,Y,block,k,cmid,method.list.all,opt.method, ties = "upper")$upper
+        mid = unlist(min_stat_block(Z,Y,block,k,cmid,method.list.all,opt.method, ties))
         if(mid>thres){
           cdown = cmid
         }else{

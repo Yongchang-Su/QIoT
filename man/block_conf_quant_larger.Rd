@@ -10,6 +10,7 @@ block_conf_quant_larger(
   block,
   method.list.all = NULL,
   opt.method = "Greedy",
+  ties = "fix",
   stat.null = NULL,
   switch = FALSE,
   null.max = 10^5,
@@ -26,6 +27,8 @@ block_conf_quant_larger(
 \item{method.list.all}{A list that contains the method of the rank scores. It might vary among different blocks}
 
 \item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.}
+
+\item{ties}{ties = "upper", "lower" or "fix". It indicates which tie-dealing methods we use to calculate statistics.}
 
 \item{stat.null}{Optional variable. You can enter the null distribution here by yourself. Otherwise it will be generated within the function.}
 

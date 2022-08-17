@@ -9,12 +9,13 @@
 #' @param gam A parameter for sensitivity analysis
 #' @param method.list.all A list that contains the method of the rank scores. It might vary among different blocks
 #' @param opt.method Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap, "LP", "ILP".
+#' @param ties A subvector of c("upper", "lower", "fix") indicating which tie-dealing methods we use to calculate p-values. "upper" will use the method that will produce maximum p-value, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function.
 #' @param switch Logical variable. If true, the function uses switching treatment and control trick when calculating p-value.
 
 #' @export
 
 
-sen_ls_p = function(Z,Y,block,k,c,gam,method.list.all,opt.method="Greedy", switch=FALSE){
+sen_ls_p = function(Z,Y,block,k,c,gam,method.list.all,opt.method="Greedy", ties = c("upper", "lower", "fix"), switch=FALSE){
   if(!is.factor(block)){
     block = as.factor(block)
   } 
@@ -58,8 +59,18 @@ sen_ls_p = function(Z,Y,block,k,c,gam,method.list.all,opt.method="Greedy", switc
       v = v + m$v
     }
   }
-  stat = min_stat_block(Z,Y,block,k,c,method.list.all, opt.method, tie = c("upper", "lower"))
-  pval = list(upper = pnorm(stat$lower, mean = u, sd = sqrt(v), lower.tail = FALSE)
-              , lower = pnorm(stat$upper, mean = u, sd = sqrt(v), lower.tail = FALSE))
+  pval = list()
+  if("upper" %in% ties){
+    stat = min_stat_block(Z, Y, block, k = k, c, method.list.all, opt.method = opt.method, ties = c("lower"))
+    pval$upper = pnorm(stat$lower, mean = u, sd = sqrt(v), lower.tail = FALSE)
+  }
+  if("lower" %in% ties){
+    stat = min_stat_block(Z, Y, block, k = k, c, method.list.all, opt.method = opt.method, ties = c("upper"))
+    pval$lower = pnorm(stat$upper, mean = u, sd = sqrt(v), lower.tail = FALSE)
+  }  
+  if("fix" %in% ties){
+    stat = min_stat_block(Z, Y, block, k = k, c, method.list.all, opt.method = opt.method, ties = c("fix"))
+    pval$fix = pnorm(stat$fix, mean = u, sd = sqrt(v), lower.tail = FALSE)
+  }
   return(pval)
 }

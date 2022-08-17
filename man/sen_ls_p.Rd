@@ -13,6 +13,7 @@ sen_ls_p(
   gam,
   method.list.all,
   opt.method = "Greedy",
+  ties = c("upper", "lower", "fix"),
   switch = FALSE
 )
 }
@@ -32,6 +33,8 @@ sen_ls_p(
 \item{method.list.all}{A list that contains the method of the rank scores. It might vary among different blocks}
 
 \item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap, "LP", "ILP".}
+
+\item{ties}{A subvector of c("upper", "lower", "fix") indicating which tie-dealing methods we use to calculate p-values. "upper" will use the method that will produce maximum p-value, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function.}
 
 \item{switch}{Logical variable. If true, the function uses switching treatment and control trick when calculating p-value.}
 }

@@ -12,7 +12,7 @@ min_stat_block(
   c,
   method.list.all,
   opt.method = "Greedy",
-  ties = c("upper", "lower", "random")
+  ties = c("upper", "lower", "fix")
 )
 }
 \arguments{
@@ -28,7 +28,7 @@ min_stat_block(
 
 \item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.}
 
-\item{ties}{A subvector of c("upper", "lower", "random") indicating which tie-dealing methods we use to calculate statistics}
+\item{ties}{A subvector of c("upper", "lower", "fix") indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function.}
 }
 \description{
 A function to calculate to calculate test statistics for null hypothesis: kth smallest treatment effect is less or equal to c.
