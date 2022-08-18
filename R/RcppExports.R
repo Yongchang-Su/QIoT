@@ -13,6 +13,10 @@ add_C <- function(L, R, p) {
     .Call(`_QIoT_add_C`, L, R, p)
 }
 
+On_median <- function(x, k = -1L) {
+    .Call(`_QIoT_On_median`, x, k)
+}
+
 LpGreedy_On_C <- function(coeflist, p) {
     .Call(`_QIoT_LpGreedy_On_C`, coeflist, p)
 }

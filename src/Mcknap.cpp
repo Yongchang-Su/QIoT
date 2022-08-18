@@ -86,7 +86,7 @@ arma::mat merge_list(arma::mat L, arma::mat R){
         LR = arma::join_horiz(LR, sm);
       }
     }
-    
+
   } while (sm[0] < arma::datum::inf);
   return LR;
 }
@@ -152,6 +152,7 @@ double objcal(Rcpp::List coeflist, Rcpp::List sol){
   }
   return obj;
 }
+// [[Rcpp::export]]
 double On_median(arma::vec x, int k = -1){
   int n = x.n_elem;
   if(n == 1){
@@ -166,16 +167,19 @@ double On_median(arma::vec x, int k = -1){
   }
   int r = rand()%n;
   double piv = x(r);
-  arma::vec les = x.elem(find(x<=piv));
+  arma::vec les = x.elem(find(x<piv));
+  arma::vec eq = x.elem(find(x==piv));
   arma::vec grt = x.elem(find(x>piv));
   int nl = les.n_elem;
-  if(nl>=k){
+  int ne = eq.n_elem;
+  if(nl>k){
     return On_median(les, k);
+  }else if(nl+ne>k){
+    return piv;
   }else{
-    return On_median(grt, k - les.n_elem);
+    return On_median(grt, k - les.n_elem - eq.n_elem);
   }
 }
-
 // [[Rcpp::export]]
 
 Rcpp::List LpGreedy_On_C(Rcpp::List coeflist, double p){
@@ -213,14 +217,14 @@ Rcpp::List LpGreedy_On_C(Rcpp::List coeflist, double p){
       sol[s] = a;
     }
     double obj = objcal(coeflist, sol);
-    return Rcpp::List::create(Rcpp::_["obj"] = obj, Rcpp::_["sol"] = sol);
+    return Rcpp::List::create(Rcpp::_["obj"] = obj);
   }
   arma::uvec S(p_w.n_elem, arma::fill::zeros);
   for(unsigned int i=0; i<S.n_elem;++i){
     S[i] = i;
   }
   double obj = 0;
-  arma::vec grp(n, arma::fill::zeros);
+  // arma::vec grp(n, arma::fill::zeros);
   double r;
   arma::uvec H, E, L;
   do{
@@ -231,52 +235,52 @@ Rcpp::List LpGreedy_On_C(Rcpp::List coeflist, double p){
     L = S.elem(arma::find(p_w_S<r));
     if(sum(w.elem(H))>p){
       S = H;
-    }else if(sum(w.elem(H))+sum(w.elem(E))<=p){
+    }else if(sum(w.elem(H))+sum(w.elem(E))<p){
       S = L;
       p -= sum(w.elem(H))+sum(w.elem(E));
       obj += sum(p_w.elem(H)%w.elem(H))+sum(p_w.elem(E)%w.elem(E));
-      for(int i=0; i<n; i++){
-        arma::uvec nH = find(strata.elem(H)==i);
-        arma::uvec nE = find(strata.elem(E)==i);
-        grp(i) = grp(i) + nH.n_elem + nE.n_elem;
-      }
+    //  for(int i=0; i<n; i++){
+    //    arma::uvec nH = find(strata.elem(H)==i);
+     //   arma::uvec nE = find(strata.elem(E)==i);
+     //   grp(i) = grp(i) + nH.n_elem + nE.n_elem;
+      //}
     }else{
-      for(int i=0; i<n; i++){
-        arma::uvec nH = arma::find(strata.elem(H)==i);
-        grp(i) = grp(i) + nH.n_elem;
-      }
+      // for(int i=0; i<n; i++){
+      //   arma::uvec nH = arma::find(strata.elem(H)==i);
+      //   grp(i) = grp(i) + nH.n_elem;
+      // }
       break;
     }
   }while(1);
   obj += sum(p_w.elem(H)%w.elem(H)) + r*(p-sum(w.elem(H)));
-  arma::vec wE = w.elem(E); 
-  arma::vec cumsumw(E.n_elem, arma::fill::zeros);
-  cumsumw[0] = wE[0];
-  for(unsigned int i=1; i<E.n_elem; i++){
-    cumsumw[i] = cumsumw[i-1] + wE[i];
-  }
-  arma::uvec Eel = E.elem(arma::find(cumsumw>p-sum(w.elem(H))));
-  int ss = Eel[0];
-  Rcpp::List sol(n);
-  for(int s=0; s<n; s++){
-    arma::mat Cs = coeflist[s], Cs1 = coeflist1[s];
-    arma::vec a(Cs.n_cols, arma::fill::zeros);
-    a(0) = 1;
-    if(s!=strata[ss]){
-      a[Cs1(0,grp[s])] = 1;
-      arma::uvec a1 = find(a==1);
-      if(a1.n_elem>1){
-        a[0] = 0;
-      }
-    }else{
-      int ind1 = Cs1(0, grp[s]);
-      int ind2 = Cs1(0, grp[s]+1);
-      a[ind2] = (p - sum(w.elem(H)))/(ind2 - ind1);
-      a[ind1] = 1- a[ind2];
-    }
-    sol[s] = a;
-  }
-  return Rcpp::List::create(Rcpp::_["obj"] = sm-obj, Rcpp::_["sol"] = sol);
+  // arma::vec wE = w.elem(E); 
+  // arma::vec cumsumw(E.n_elem, arma::fill::zeros);
+  // cumsumw[0] = wE[0];
+  // for(unsigned int i=1; i<E.n_elem; i++){
+  //   cumsumw[i] = cumsumw[i-1] + wE[i];
+  // }
+  // arma::uvec Eel = E.elem(arma::find(cumsumw>p-sum(w.elem(H))));
+  // int ss = Eel[0];
+  // Rcpp::List sol(n);
+  // for(int s=0; s<n; s++){
+  //   arma::mat Cs = coeflist[s], Cs1 = coeflist1[s];
+  //   arma::vec a(Cs.n_cols, arma::fill::zeros);
+  //   a(0) = 1;
+  //   if(s!=strata[ss]){
+  //     a[Cs1(0,grp[s])] = 1;
+  //     arma::uvec a1 = find(a==1);
+  //     if(a1.n_elem>1){
+  //       a[0] = 0;
+  //     }
+  //   }else{
+  //     int ind1 = Cs1(0, grp[s]);
+  //     int ind2 = Cs1(0, grp[s]+1);
+  //     a[ind2] = (p - sum(w.elem(H)))/(ind2 - ind1);
+  //     a[ind1] = 1- a[ind2];
+  //   }
+  //   sol[s] = a;
+  // }
+  return Rcpp::List::create(Rcpp::_["obj"] = sm-obj);
 }
 
 Rcpp::List IPDomRem_C(Rcpp::List coeflist){

@@ -53,6 +53,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// On_median
+double On_median(arma::vec x, int k);
+RcppExport SEXP _QIoT_On_median(SEXP xSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(On_median(x, k));
+    return rcpp_result_gen;
+END_RCPP
+}
 // LpGreedy_On_C
 Rcpp::List LpGreedy_On_C(Rcpp::List coeflist, double p);
 RcppExport SEXP _QIoT_LpGreedy_On_C(SEXP coeflistSEXP, SEXP pSEXP) {
@@ -179,6 +191,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_QIoT_RC_C", (DL_FUNC) &_QIoT_RC_C, 4},
     {"_QIoT_RS_C", (DL_FUNC) &_QIoT_RS_C, 5},
     {"_QIoT_add_C", (DL_FUNC) &_QIoT_add_C, 3},
+    {"_QIoT_On_median", (DL_FUNC) &_QIoT_On_median, 2},
     {"_QIoT_LpGreedy_On_C", (DL_FUNC) &_QIoT_LpGreedy_On_C, 2},
     {"_QIoT_DP_C", (DL_FUNC) &_QIoT_DP_C, 2},
     {"_QIoT_rank_score", (DL_FUNC) &_QIoT_rank_score, 2},

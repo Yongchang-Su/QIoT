@@ -28,12 +28,13 @@ min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greed
   comb = matrix(nrow = N, ncol = 3)
   if("upper" %in% ties){
     flag = (Z==0)
+    s = sum(flag)
     comb[,3] = block
-    comb[1:sum(flag),2] = Y[flag]
-    comb[(sum(flag)+1):N,2] = Y[!flag]
-    comb[1:sum(flag),3] = block[flag]
-    comb[(sum(flag)+1):N,3] = block[!flag]
-    comb[,1] = c(rep(0, sum(flag)), rep(1, N-sum(flag)))
+    comb[1:s,2] = Y[flag]
+    comb[(s+1):N,2] = Y[!flag]
+    comb[1:s,3] = block[flag]
+    comb[(s+1):N,3] = block[!flag]
+    comb[,1] = c(rep(0, s), rep(1, N-sum(flag)))
     comb = comb[order(comb[,2]),]
     
     Z2 = comb[,1]
@@ -43,11 +44,6 @@ min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greed
     coeflist = test_stat_matrix_block(Z2, Y2, block2, c, method.list.all)
     
     if(opt.method == "Greedy"){
-      for(i in 1:length(coeflist)){
-        if(ncol(coeflist[[i]])>N-k+1){
-          coeflist[[i]] = coeflist[[i]][,1:(N-k+1),drop=FALSE]
-        }
-      }
       stat = LpGreedy_On_C(coeflist, N - k)$obj
     }
     if(opt.method == "DP"){
@@ -55,22 +51,14 @@ min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greed
 
     }
     if(opt.method == "LP"){
-      for(i in 1:length(coeflist)){
-        if(ncol(coeflist[[i]])>N-k+1){
-          coeflist[[i]] = coeflist[[i]][,1:(N-k+1),drop=FALSE]
-        }
-      }
+
       stat = Lpsolve_sol(coeflist, N - k, exact = FALSE)
     }
     if(opt.method == "ILP"){
       stat = Lpsolve_sol(coeflist, N - k, exact = TRUE)
     }
     if(opt.method == "LP_gurobi"){
-      for(i in 1:length(coeflist)){
-        if(ncol(coeflist[[i]])>N-k+1){
-          coeflist[[i]] = coeflist[[i]][,1:(N-k+1),drop=FALSE]
-        }
-      }
+
       stat = Gurobi_sol(coeflist, N - k, exact = FALSE)$obj
     }
     if(opt.method == "ILP_gurobi"){
@@ -86,12 +74,13 @@ min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greed
   }
   if("lower" %in% ties){
     flag = (Z==1)
+    s = sum(flag)
     comb[,3] = block
-    comb[1:sum(flag),2] = Y[flag]
-    comb[(sum(flag)+1):N,2] = Y[!flag]
-    comb[1:sum(flag),3] = block[flag]
-    comb[(sum(flag)+1):N,3] = block[!flag]
-    comb[,1] = c(rep(1, sum(flag)), rep(0, N-sum(flag)))
+    comb[1:s,2] = Y[flag]
+    comb[(s+1):N,2] = Y[!flag]
+    comb[1:s,3] = block[flag]
+    comb[(s+1):N,3] = block[!flag]
+    comb[,1] = c(rep(1, s), rep(0, N-s))
     comb = comb[order(comb[,2]),]
     
     Z1 = comb[,1]
@@ -99,33 +88,18 @@ min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greed
     block1 = comb[,3]
     coeflist = test_stat_matrix_block(Z1, Y1, block1, c, method.list.all)
     if(opt.method == "Greedy"){
-      for(i in 1:length(coeflist)){
-        if(ncol(coeflist[[i]])>N-k+1){
-          coeflist[[i]] = coeflist[[i]][,1:(N-k+1),drop=FALSE]
-        }
-      }
       stat = LpGreedy_On_C(coeflist, N - k)$obj
     }
     if(opt.method == "DP"){
       stat = DP_C(coeflist, N - k)$obj
     }
     if(opt.method == "LP"){
-      for(i in 1:length(coeflist)){
-        if(ncol(coeflist[[i]])>N-k+1){
-          coeflist[[i]] = coeflist[[i]][,1:(N-k+1),drop=FALSE]
-        }
-      }
       stat = Lpsolve_sol(coeflist, N - k, exact = FALSE)
     }
     if(opt.method == "ILP"){
       stat = Lpsolve_sol(coeflist, N - k, exact = TRUE)
     }  
     if(opt.method == "LP_gurobi"){
-      for(i in 1:length(coeflist)){
-        if(ncol(coeflist[[i]])>N-k+1){
-          coeflist[[i]] = coeflist[[i]][,1:(N-k+1),drop=FALSE]
-        }
-      }
       stat = Gurobi_sol(coeflist, N - k, exact = FALSE)$obj
     }
     if(opt.method == "ILP_gurobi"){
@@ -142,33 +116,18 @@ min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greed
   if("fix" %in% ties){
     coeflist = test_stat_matrix_block(Z, Y, block, c, method.list.all)
     if(opt.method == "Greedy"){
-      for(i in 1:length(coeflist)){
-        if(ncol(coeflist[[i]])>N-k+1){
-          coeflist[[i]] = coeflist[[i]][,1:(N-k+1),drop=FALSE]
-        }
-      }
       stat = LpGreedy_On_C(coeflist, N - k)$obj
     }
     if(opt.method == "DP"){
       stat = DP_C(coeflist, N - k)$obj
     }
     if(opt.method == "LP"){
-      for(i in 1:length(coeflist)){
-        if(ncol(coeflist[[i]])>N-k+1){
-          coeflist[[i]] = coeflist[[i]][,1:(N-k+1),drop=FALSE]
-        }
-      }
       stat = Lpsolve_sol(coeflist, N - k, exact = FALSE)
     }
     if(opt.method == "ILP"){
       stat = Lpsolve_sol(coeflist, N - k, exact = TRUE)
     } 
     if(opt.method == "LP_gurobi"){
-      for(i in 1:length(coeflist)){
-        if(ncol(coeflist[[i]])>N-k+1){
-          coeflist[[i]] = coeflist[[i]][,1:(N-k+1),drop=FALSE]
-        }
-      }
       stat = Gurobi_sol(coeflist, N - k, exact = FALSE)$obj
     }
     if(opt.method == "ILP_gurobi"){
