@@ -163,7 +163,7 @@ double On_median(arma::vec x, int k = -1){
     return x(0);
   }
   if(k < 0){
-    k = ceil(n/2)+1;
+    k = floor((n+1)/2);
   }
   int r = rand()%n;
   double piv = x(r);
@@ -174,7 +174,7 @@ double On_median(arma::vec x, int k = -1){
   int ne = eq.n_elem;
   if(nl>k){
     return On_median(les, k);
-  }else if(nl+ne>k){
+  }else if(nl+ne>=k){
     return piv;
   }else{
     return On_median(grt, k - les.n_elem - eq.n_elem);
@@ -235,7 +235,7 @@ Rcpp::List LpGreedy_On_C(Rcpp::List coeflist, double p){
     L = S.elem(arma::find(p_w_S<r));
     if(sum(w.elem(H))>p){
       S = H;
-    }else if(sum(w.elem(H))+sum(w.elem(E))<p){
+    }else if(sum(w.elem(H))+sum(w.elem(E))<=p){
       S = L;
       p -= sum(w.elem(H))+sum(w.elem(E));
       obj += sum(p_w.elem(H)%w.elem(H))+sum(p_w.elem(E)%w.elem(E));
