@@ -29,12 +29,11 @@ min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greed
   if("upper" %in% ties){
     flag = (Z==0)
     s = sum(flag)
-    comb[,3] = block
     comb[1:s,2] = Y[flag]
     comb[(s+1):N,2] = Y[!flag]
     comb[1:s,3] = block[flag]
     comb[(s+1):N,3] = block[!flag]
-    comb[,1] = c(rep(0, s), rep(1, N-sum(flag)))
+    comb[,1] = c(rep(0, s), rep(1, N-s))
     comb = comb[order(comb[,2]),]
     
     Z2 = comb[,1]
@@ -114,7 +113,14 @@ min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greed
     output$lower = stat
   }
   if("fix" %in% ties){
-    coeflist = test_stat_matrix_block(Z, Y, block, c, method.list.all)
+    comb[,1] = Z
+    comb[,2] = Y
+    comb[,3] = block
+    comb = comb[order(comb[,2]),]
+    Z3 = comb[,1]
+    Y3 = comb[,2]
+    block3 = comb[,3]
+    coeflist = test_stat_matrix_block(Z3, Y3, block3, c, method.list.all)
     if(opt.method == "Greedy"){
       stat = LpGreedy_On_C(coeflist, N - k)$obj
     }
