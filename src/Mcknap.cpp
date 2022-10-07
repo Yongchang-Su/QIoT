@@ -579,7 +579,7 @@ Rcpp::List test_stat_matrix_block(arma::vec Z, arma::vec Y,
       if(method_list_all.size()==1){
         method_list = method_list_all[0];
       }else{
-        method_list = method_list_all[j];
+        method_list = method_list_all[i];
       }
       Ti(1, j) = min_stat(Zb, Yb, nb-j, c, method_list);
     }
