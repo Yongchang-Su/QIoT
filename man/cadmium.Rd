@@ -44,7 +44,7 @@ A data frame with 1536 rows and 34 variables:
 }
 }
 \source{
-\href{https://cran.r-project.org/web/packages/bigmatch/index.html}
+NHANES, the US National Health and Nutrition Examination Survey, 2005-2006.
 }
 \usage{
 data(cadmium)

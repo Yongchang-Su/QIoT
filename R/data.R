@@ -42,5 +42,5 @@
 #'   \item{p}{Propensity score obtained by performing optimal match.}
 #'   \item{mset}{Group id after matching}
 #' }
-#' @source \href{https://cran.r-project.org/web/packages/bigmatch/index.html}
+#' @source NHANES, the US National Health and Nutrition Examination Survey, 2005-2006.
 "cadmium"
