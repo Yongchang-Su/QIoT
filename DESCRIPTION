@@ -8,6 +8,11 @@ Maintainer: Yongchang Su <ysu17@illinois.edu>
 Description: The package helps to do one-sided hypothesis testing with respect to any quantiles of treatment effects, both in stratifed randomized experiments and matched observational studies settings. Further, it will generate the confidence region of all treatments effects and visulize it so that people can better understand the pattern of them.
 License: MIT
 Encoding: UTF-8
-Imports: Rcpp (>= 1.0.8)
+Imports: Rcpp (>= 1.0.8), RcppArmadillo, lpSolveAPI
 LinkingTo: Rcpp, RcppArmadillo
+Suggests: 
+    gurobi,
+    knitr,
+    rmarkdown
 RoxygenNote: 7.2.1
+VignetteBuilder: knitr
