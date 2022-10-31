@@ -24,5 +24,5 @@ Here we make a brief introduction to the functions the packages contains.
 ## Data
 Two sets of data used in the paper are included in the package.
 
-- cadmium: The data is originally collected by the US National Health and Nutrition Examination Survey, 2005-2006, to study how smoking would affect the cadmium level in human's blood. It was later cleaned and included in the package ``bigmatch". The data contains 1536 observations and 34 variables.
-- unemployed: The data includes some information of a reform in Austria and was used in the paper ``Graded Matching for Large Observational Studies" by Ruoqi Yu and Paul Rosenbaum. The data contains 225821 observations and 175 variables.
+- cadmium: The data is originally collected by the US National Health and Nutrition Examination Survey, 2005-2006, to study how smoking would affect the cadmium level in human's blood. It was later cleaned and included in the package ``bigmatch''. The data contains 1536 observations and 34 variables.
+- unemployed: The data includes some information of a reform in Austria and was used in the paper ``Graded Matching for Large Observational Studies'' by Ruoqi Yu and Paul Rosenbaum. The data contains 225821 observations and 175 variables.
