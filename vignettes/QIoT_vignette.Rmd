@@ -7,21 +7,23 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+The vignette is intended to show how to use this package to do simple inference with some examples. The code also serves as an approach to replicate the results in our paper. 
+
+
 ##### Install QIoT package
 
 ```{r, setup, include=FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width=6, fig.height=6)
 ```
 
 The installation of our QIoT package requires the help from package devtools. You can follow the code below.
 
-```{r}
-### set work directory to path where QIoT is at
-# setwd()
+```{r,results==FALSE}
+
 library(gurobi)
 library(devtools)
-# lpSolveAPI
 install_github("Yongchang-Su/QIoT")
+library(QIoT)
 ```
 
 
@@ -30,10 +32,10 @@ install_github("Yongchang-Su/QIoT")
 The first thing to do is to load the data and specify the ranking method your want to apply. Here we simply use Wilcoxon rank sum statistics for all strata.
 
 ```{r}
-md = data("cadmium")
-Y = md$cadmium
-block = md$mset
-Z = md$z
+data("cadmium")
+Y = cadmium$cadmium
+block = cadmium$mset
+Z = cadmium$z
 method.list.all = list()
 method.list.all[[1]] = list(name = "Wilcoxon")
 
@@ -45,22 +47,15 @@ method.list.all[[1]] = list(name = "Wilcoxon")
 One important contribution of our paper is that we can obtain simultaneous confidence region for quantiles of treatment effects. Here is the code to implement them. We also encourage the users to apply our switching treatment trick, which can make the confidence region more informative.
 
 ```{r}
-time.start = Sys.time()
-LB_switch = QIoT::block_conf_quant_larger(Z,Y,block,method.list.all,opt.method = "Greedy", switch = TRUE, null.max=10^5)
-time.end = Sys.time()
-greed.time = difftime(time.end, time.start, units = "secs")
 
-time.start = Sys.time()
-LB_switch_gurobi = QIoT::block_conf_quant_larger(Z,Y,block,method.list.all,opt.method = "ILP_gurobi", switch = TRUE, null.max=10^5)
-time.end = Sys.time()
-greed.ilp.gurobi = difftime(time.end, time.start, units = "secs")
+LB_switch = QIoT::block_conf_quant_larger(Z,Y,block,method.list.all,opt.method = "Greedy", switch = TRUE, null.max=10^5)
 
 LB_noswitch = QIoT::block_conf_quant_larger(Z,Y,block,method.list.all,opt.method = "Greedy", switch = FALSE, null.max=10^5)
 
 ```
 
 
-##### Give visual aid for CIs
+##### Visual aids for CIs
 
 Below is the visual results of confidence region for quantiles of treatment effect. The points are the lower limits of one-sided confidence intervals. For this specific case, we are 90% confident that all treatment effects fall to the right side of these points. Based on the plot, it's obvious to conclude that switching labels does promote information utilization, as it gives tighter confidence region.
 
@@ -75,6 +70,9 @@ legend("topleft", pch = 1, col = c("black", "grey"),legend = c("switching labels
 
 ##### Find desired $\Gamma$'s for sensitivity analysis
 
+In sensitivity analysis, we gradually release the model constraints until major conclusions are changed. You can think of $\Gamma$ as a parameter that controls how strict the constraint is. We are interested in the values of $\Gamma$ that makes confidence interval of a certain quantile change from not including 0 to include it.
+
+Here we first figure out the corresponding $\Gamma$'s to 70%, 75%, $\ldots$, 100%.
 
 ```{r}
 gammas = rep(0, 7)
@@ -160,5 +158,6 @@ for(i in 1:rep_time){
 }
 
 
-pw = rbind(sw, no_sw)/rep_time
-colnames(pw) = 1+(0:9)*0.1
+power = rbind(sw, no_sw)/rep_time
+colnames(power) = 1+(0:9)*0.1
+print(power)
