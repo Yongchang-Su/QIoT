@@ -22,7 +22,7 @@ The installation of our QIoT package requires the help from package devtools. Yo
 
 library(gurobi)
 library(devtools)
-install_github("Yongchang-Su/QIoT")
+install_github("Yongchang-Su/QIoT", force = "TRUE")
 library(QIoT)
 ```
 
