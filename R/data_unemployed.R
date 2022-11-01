@@ -1,6 +1,7 @@
-#' Austria unemployment change due to unemployment benefits
+#' Austria unemployment change due to unemployment benefits.
 #' 
 #' This data concentrates on the reform in policies of unemployment benefits in Austria and how it influence the duration of unemployment.
+#' 
 #' @docType data
 #' @keywords datasets
 #' @name unemployed

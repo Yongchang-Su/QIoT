@@ -6,7 +6,6 @@
 #' @name cadmium
 #' @usage data(cadmium)
 #' @format A data frame with 1536 rows and 34 variables:
-#' \describe{
 #'   \item{Row}{a numeric vector}
 #'   \item{SEQN}{NHANES id number}
 #'   \item{female}{1 if female, 0 if male}
@@ -45,16 +44,3 @@
 #' @source NHANES, the US National Health and Nutrition Examination Survey, 2005-2006.
 "cadmium"
 
-
-
-
-#' Austria unemployment change due to unemployment benefits
-#' 
-#' This data concentrates on the reform in policies of unemployment benefits in Austria and how it influence the duration of unemployment.
-#' @docType data
-#' @keywords datasets
-#' @name unemployed
-#' @usage data(unemployed)
-#' @format A data frame with 225821 rows and 175 variables:
-#' @source Ruoqi Yu & Paul R. Rosenbaum (2022) Graded Matching for Large Observational Studies, Journal of Computational and Graphical Statistics, DOI: 10.1080/10618600.2022.2058001.
-"unemployed"
