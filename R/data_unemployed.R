@@ -6,6 +6,6 @@
 #' @keywords datasets
 #' @name unemployed
 #' @usage data(unemployed)
-#' @format A data frame with 225821 rows and 175 variables:
+#' @format A data frame with 225821 rows and 175 variables.
 #' @source Ruoqi Yu & Paul R. Rosenbaum (2022) Graded Matching for Large Observational Studies, Journal of Computational and Graphical Statistics, DOI: 10.1080/10618600.2022.2058001.
 "unemployed"
