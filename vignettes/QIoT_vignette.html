@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>QIoT_vignette</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">QIoT_vignette</h1>
+
+
+
+<p>The vignette is intended to show how to use this package to do simple
+inference with some examples. The code also serves as an approach to
+replicate the results in our paper.</p>
+<div id="install-qiot-package" class="section level5">
+<h5>Install QIoT package</h5>
+<p>The installation of our QIoT package requires the help from package
+devtools. You can follow the code below.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">### set work directory to path where QIoT is at</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># setwd()</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gurobi)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required package: slam</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required package: usethis</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># lpSolveAPI</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">&quot;Yongchang-Su/QIoT&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Downloading GitHub repo Yongchang-Su/QIoT@HEAD</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RcppArmad... (0.11.2.0.0   -&gt; 0.11.4.0.1  ) [CRAN]</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; lpSolveAPI   (5.5.2.0-17.7 -&gt; 5.5.2.0-17.9) [CRAN]</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Installing 2 packages: RcppArmadillo, lpSolveAPI</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Installing packages into &#39;C:/Users/ycsuf/AppData/Local/R/win-library/4.2&#39;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (as &#39;lib&#39; is unspecified)</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; package &#39;RcppArmadillo&#39; successfully unpacked and MD5 sums checked</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: cannot remove prior installation of package &#39;RcppArmadillo&#39;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in file.copy(savedcopy, lib, recursive = TRUE):</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; problem copying C:\Users\ycsuf\AppData\Local\R\win-</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; library\4.2\00LOCK\RcppArmadillo\libs\x64\RcppArmadillo.dll</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; to C:\Users\ycsuf\AppData\Local\R\win-</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; library\4.2\RcppArmadillo\libs\x64\RcppArmadillo.dll: Permission denied</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: restored &#39;RcppArmadillo&#39;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; package &#39;lpSolveAPI&#39; successfully unpacked and MD5 sums checked</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: cannot remove prior installation of package &#39;lpSolveAPI&#39;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in file.copy(savedcopy, lib, recursive = TRUE):</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; problem copying C:\Users\ycsuf\AppData\Local\R\win-</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; library\4.2\00LOCK\lpSolveAPI\libs\x64\lpSolveAPI.dll to C:</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; \Users\ycsuf\AppData\Local\R\win-library\4.2\lpSolveAPI\libs\x64\lpSolveAPI.dll:</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Permission denied</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: restored &#39;lpSolveAPI&#39;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The downloaded binary packages are in</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  C:\Users\ycsuf\AppData\Local\Temp\RtmpsJEZdI\downloaded_packages</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning message:</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; In normalizePath(path.expand(path), winslash, mustWork) :</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   path[1]=&quot;C:/Users/ycsuf/OneDrive/??&quot;: The filename, directory name, or volume label syntax is incorrect</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning message:</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; In normalizePath(path.expand(path), winslash, mustWork) :</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   path[1]=&quot;C:/Users/ycsuf/OneDrive/??&quot;: The filename, directory name, or volume label syntax is incorrect</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning message:</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; In normalizePath(path.expand(path), winslash, mustWork) :</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   path[1]=&quot;C:/Users/ycsuf/OneDrive/??&quot;: The filename, directory name, or volume label syntax is incorrect</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * checking for file &#39;C:\Users\ycsuf\AppData\Local\Temp\RtmpsJEZdI\remotes6c5c5959388b\Yongchang-Su-QIoT-921d654/DESCRIPTION&#39; ... OK</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * preparing &#39;QIoT&#39;:</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * checking DESCRIPTION meta-information ... OK</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * cleaning src</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * installing the package to process help pages</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * saving partial Rd database</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * cleaning src</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * checking for LF line-endings in source and make files and shell scripts</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * checking for empty or unneeded directories</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * looking to see if a &#39;data/datalist&#39; file should be added</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   NB: this package now depends on R (&gt;= 3.5.0)</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   </span><span class="al">WARNING</span><span class="co">: Added dependency on R &gt;= 3.5.0 because serialized objects in</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   serialize/load version 3 cannot be read in older versions of R.</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   File(s) containing such objects:</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &#39;QIoT/data/cadmium.rda&#39; &#39;QIoT/data/unemployed.rda&#39;</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * building &#39;QIoT_1.0.tar.gz&#39;</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Installing package into &#39;C:/Users/ycsuf/AppData/Local/R/win-library/4.2&#39;</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (as &#39;lib&#39; is unspecified)</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in i.p(...): installation of package &#39;C:/Users/ycsuf/AppData/Local/Temp/</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; RtmpsJEZdI/file6c5c7589fbe/QIoT_1.0.tar.gz&#39; had non-zero exit status</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(QIoT)</span></code></pre></div>
+</div>
+<div id="load-the-data-and-specify-ranking-method" class="section level5">
+<h5>Load the data and specify ranking method</h5>
+<p>The first thing to do is to load the data and specify the ranking
+method your want to apply. Here we simply use Wilcoxon rank sum
+statistics for all strata.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;cadmium&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> cadmium<span class="sc">$</span>cadmium</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>block <span class="ot">=</span> cadmium<span class="sc">$</span>mset</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">=</span> cadmium<span class="sc">$</span>z</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>method.list.all <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>method.list.all[[<span class="dv">1</span>]] <span class="ot">=</span> <span class="fu">list</span>(<span class="at">name =</span> <span class="st">&quot;Wilcoxon&quot;</span>)</span></code></pre></div>
+</div>
+<div id="calculate-lower-limits-of-cis-with-or-without-applying-the-switching-treatment-trick" class="section level5">
+<h5>Calculate lower limits of CIs with or without applying the switching
+treatment trick</h5>
+<p>One important contribution of our paper is that we can obtain
+simultaneous confidence region for quantiles of treatment effects. Here
+is the code to implement them. We also encourage the users to apply our
+switching treatment trick, which can make the confidence region more
+informative.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>LB_switch <span class="ot">=</span> QIoT<span class="sc">::</span><span class="fu">block_conf_quant_larger</span>(Z,Y,block,method.list.all,<span class="at">opt.method =</span> <span class="st">&quot;Greedy&quot;</span>, <span class="at">switch =</span> <span class="cn">TRUE</span>, <span class="at">null.max=</span><span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>LB_noswitch <span class="ot">=</span> QIoT<span class="sc">::</span><span class="fu">block_conf_quant_larger</span>(Z,Y,block,method.list.all,<span class="at">opt.method =</span> <span class="st">&quot;Greedy&quot;</span>, <span class="at">switch =</span> <span class="cn">FALSE</span>, <span class="at">null.max=</span><span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>)</span></code></pre></div>
+</div>
+<div id="visual-aids-for-cis" class="section level5">
+<h5>Visual aids for CIs</h5>
+<p>Below is the visual results of confidence region for quantiles of
+treatment effect. The points are the lower limits of one-sided
+confidence intervals. For this specific case, we are 90% confident that
+all treatment effects fall to the right side of these points. Based on
+the plot, it’s obvious to conclude that switching labels does promote
+information utilization, as it gives tighter confidence region.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(LB_switch[LB_switch<span class="sc">&gt;-</span><span class="cn">Inf</span>], (<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(LB_switch))[LB_switch<span class="sc">&gt;-</span><span class="cn">Inf</span>], <span class="at">type =</span> <span class="st">&quot;p&quot;</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="dv">1</span>), <span class="at">xlab =</span> <span class="st">&quot;c&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;k&quot;</span>, <span class="at">cex =</span> <span class="fl">0.5</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(LB_noswitch[LB_noswitch<span class="sc">&gt;-</span><span class="cn">Inf</span>], (<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(LB_noswitch))[LB_noswitch<span class="sc">&gt;-</span><span class="cn">Inf</span>], <span class="at">cex =</span> <span class="fl">0.5</span>, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>, <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;grey&quot;</span>),<span class="at">legend =</span> <span class="fu">c</span>(<span class="st">&quot;switching labels&quot;</span>, <span class="st">&quot;no switching&quot;</span>))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="find-desired-gammas-for-sensitivity-analysis" class="section level5">
+<h5>Find desired <span class="math inline">\(\Gamma\)</span>’s for
+sensitivity analysis</h5>
+<p>In sensitivity analysis, we gradually release the model constraints
+until major conclusions are changed. You can think of <span class="math inline">\(\Gamma\)</span> as a parameter that controls how
+strict the constraint is. We are interested in the values of <span class="math inline">\(\Gamma\)</span> that makes confidence interval of
+a certain quantile change from not including 0 to include it.</p>
+<p>Here we first figure out the corresponding <span class="math inline">\(\Gamma\)</span>’s to 70%, 75%, <span class="math inline">\(\ldots\)</span>, 100%.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gammas <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">7</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>enum <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>gam <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(quant <span class="cf">in</span> <span class="fl">0.65</span> <span class="sc">+</span> <span class="fl">0.05</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)){</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">=</span> <span class="fu">floor</span>(quant <span class="sc">*</span> <span class="fu">length</span>(Z))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span>(<span class="dv">1</span>){</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    pval <span class="ot">=</span> QIoT<span class="sc">::</span><span class="fu">sen_ls_p</span>(Z, Y, block, k, <span class="dv">0</span>, gam, method.list.all, <span class="at">switch =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>upper</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(pval <span class="sc">&gt;</span> <span class="fl">0.1</span>){</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>      gammas[enum] <span class="ot">=</span> <span class="fu">max</span>(gam <span class="sc">-</span> <span class="fl">0.1</span>, <span class="dv">1</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      enum <span class="ot">=</span> enum <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">break</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    gam <span class="ot">=</span> gam <span class="sc">+</span> <span class="fl">0.1</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(gammas)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1.0  1.5  2.2  3.4  5.5 10.5 38.4</span></span></code></pre></div>
+</div>
+<div id="calculate-cis-for-those-gammas" class="section level5">
+<h5>Calculate CIs for those <span class="math inline">\(\Gamma\)</span>’s</h5>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>CIlist <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>){</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  gam <span class="ot">=</span> gammas[i]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  CIlist[[i]] <span class="ot">=</span> QIoT<span class="sc">::</span><span class="fu">sen_block_conf_quant_larger</span>(Z, Y, block, method.list.all, gam,<span class="at">switch =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(CIlist[[<span class="dv">1</span>]][CIlist[[<span class="dv">1</span>]]<span class="sc">&gt;-</span><span class="cn">Inf</span>], (<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(CIlist[[<span class="dv">1</span>]]))[CIlist[[<span class="dv">1</span>]]<span class="sc">&gt;-</span><span class="cn">Inf</span>], <span class="at">type =</span> <span class="st">&quot;p&quot;</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="dv">1</span>), <span class="at">xlab =</span> <span class="st">&quot;c&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;k&quot;</span>, <span class="at">cex =</span> <span class="fl">0.5</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">7</span>){</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">points</span>(CIlist[[i]][CIlist[[i]]<span class="sc">&gt;-</span><span class="cn">Inf</span>], (<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(CIlist[[i]]))[CIlist[[i]]<span class="sc">&gt;-</span><span class="cn">Inf</span>], <span class="at">cex =</span> <span class="fl">0.5</span>, <span class="at">col =</span> i) </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;bottomright&quot;</span>, <span class="at">col =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>, <span class="at">pch =</span> <span class="dv">1</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="fu">expression</span>(Gamma <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">expression</span>(Gamma <span class="sc">==</span> <span class="fl">1.5</span>),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">expression</span>(Gamma <span class="sc">==</span> <span class="fl">2.2</span>),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">expression</span>(Gamma <span class="sc">==</span> <span class="fl">3.4</span>),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">expression</span>(Gamma <span class="sc">==</span> <span class="fl">5.5</span>),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">expression</span>(Gamma <span class="sc">==</span> <span class="fl">10.5</span>),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">expression</span>(Gamma <span class="sc">==</span> <span class="fl">38.4</span>)))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="comparison-of-power-between-switching-labels-or-not" class="section level5">
+<h5>Comparison of power between switching labels or not</h5>
+<p>We generate the data as following. Set number of strata <span class="math inline">\(S=200\)</span>, stratum size <span class="math inline">\(n=10\)</span>. Within each stratum, there is <span class="math inline">\(1\)</span> treatment unit and <span class="math inline">\(9\)</span> control units. The response is
+generated by</p>
+<p><span class="math display">\[Y = Z+\mathcal N(0,1),  \]</span>
+i.e. the treatment effect is constant 1 in this setting. We want to
+calculate the empirical power of our method with or without applying
+switching labels trick.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>S <span class="ot">=</span> <span class="dv">200</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">=</span> S<span class="sc">*</span>n</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">rep</span>(<span class="dv">0</span>,n<span class="dv">-1</span>)), S)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>block <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>S, <span class="at">each =</span> n)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>method.list.all <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>method.list.all[[<span class="dv">1</span>]] <span class="ot">=</span> <span class="fu">list</span>(<span class="at">name =</span> <span class="st">&quot;Stephenson&quot;</span>, <span class="at">s=</span><span class="dv">4</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>sw <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>no_sw <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="dv">10</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>rep_time <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>rep_time){</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">=</span> <span class="fu">rnorm</span>(S<span class="sc">*</span>n) <span class="sc">+</span> Z</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(QIoT<span class="sc">::</span><span class="fu">sen_ls_p</span>(Z,Y,block,<span class="fu">floor</span>(<span class="fl">0.95</span><span class="sc">*</span>N),<span class="dv">0</span>, <span class="at">gam=</span><span class="dv">1</span><span class="fl">+0.1</span><span class="sc">*</span>(j<span class="dv">-1</span>),method.list.all)<span class="sc">$</span>lower<span class="sc">&lt;</span><span class="fl">0.1</span>){</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>      no_sw[j] <span class="ot">=</span> no_sw[j] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(QIoT<span class="sc">::</span><span class="fu">sen_ls_p</span>(Z,Y,block,<span class="fu">floor</span>(<span class="fl">0.95</span><span class="sc">*</span>N),<span class="dv">0</span>, <span class="at">gam=</span><span class="dv">1</span><span class="fl">+0.1</span><span class="sc">*</span>(j<span class="dv">-1</span>),method.list.all,<span class="at">switch =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>lower<span class="sc">&lt;</span><span class="fl">0.1</span>){</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>      sw[j] <span class="ot">=</span> sw[j] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>power <span class="ot">=</span> <span class="fu">rbind</span>(sw, no_sw)<span class="sc">/</span>rep_time</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(power) <span class="ot">=</span> <span class="dv">1</span><span class="sc">+</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>)<span class="sc">*</span><span class="fl">0.1</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(power)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;          1  1.1  1.2  1.3  1.4  1.5  1.6  1.7 1.8 1.9</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; sw    0.99 0.87 0.67 0.44 0.22 0.09 0.03 0.01   0   0</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; no_sw 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00   0   0</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
