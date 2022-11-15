@@ -635,7 +635,7 @@ arma::vec null_dist_block_C(arma::vec Z,
       arma::mat Z_perm = Rcpp::as<arma::mat>(Z_perm_);
       Z_perm_i = Z_perm.rows(bb);
     }
-    stat_null += null_dist(nb, mb, method_list, R_NilValue, Rcpp::wrap(Z_perm_i));
+    stat_null += null_dist(nb, mb, method_list, R_NilValue, Rcpp::wrap(Z_perm_i), null_max);
   }
   return stat_null;
 }
