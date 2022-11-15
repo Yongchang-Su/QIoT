@@ -29,5 +29,40 @@ One set of data used in the paper is included in the package.
 Here we share some sample application of our package.
 
 ```S
+### Simulation data with normal(5, 1) distributed treatment effects
+S = 10
+n = 10
+N = S*n
+block = rep(1:S, each = n)
+Z = rep(rep(c(0,1), 5), S)
+Y = rnorm(S*n) + Z*(5+rnorm(S*n))
 
+### Choose Stephenson rank sum as our test statistic
+method.list.all = list()
+method.list.all[[1]] = list(name = "Stephenson", s=3)
+
+### Calculate p-values for null that 10th largest treatment effect is no more than 3
+pval_block(Z, Y, block, k = 90, c = 3, method.list.all)
 ```
+with output similar to
+```S
+$upper
+[1] 0.00012
+
+$lower
+[1] 0.00012
+
+$fix
+[1] 0.00012
+```
+and the statement is clearly rejected. Moreover, you can move on to more advanced inference like calculating confidence region of treatment effect vector.
+```S
+### Calculate lower limit of CIs of treatment effects
+CI_lower = block_conf_quant_larger(Z, Y, block, method.list.all)
+plot(CI_lower[CI_lower>-Inf], (1:length(CI_lower))[CI_lower>-Inf], type = "p", xlab = "c", ylab = "k", cex = 1.5, col = "black", pch = 18)
+segments(CI_lower[CI_lower>-Inf], (1:length(CI_lower))[CI_lower>-Inf], 5, (1:length(CI_lower))[CI_lower>-Inf], lty= 2)
+```
+The visualization of the results looks like this:
+![Title](https://i.postimg.cc/m2jD9RbR/Rplot.png)
+The plots is 90% confidence region of all treatment effects from largest to smallest. Note that only the largest 21 treatment effects are shown in the plot, as the rest are non-informative CIs. It tells us the lowest possible values of quantiles of treatment effects simultaneously with certain confidence.
+
