@@ -64,5 +64,5 @@ segments(CI_lower[CI_lower>-Inf], (1:length(CI_lower))[CI_lower>-Inf], 5, (1:len
 ```
 The visualization of the results looks like this:
 ![Title](https://i.postimg.cc/m2jD9RbR/Rplot.png)
-The plots is 90% confidence region of all treatment effects from largest to smallest. Note that only the largest 21 treatment effects are shown in the plot, as the rest are non-informative CIs. It tells us the lowest possible values of quantiles of treatment effects simultaneously with certain confidence.
+The plot is 90% confidence region of all treatment effects ordered from largest to smallest. Note that only the largest 21 treatment effects are shown in the plot, as the rest are non-informative CIs. It tells us the lowest possible values of quantiles of treatment effects simultaneously with certain confidence.
 
