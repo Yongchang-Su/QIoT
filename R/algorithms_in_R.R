@@ -1,5 +1,6 @@
 #' Algorithms that calculate test statistics
 #' @import lpSolveAPI 
+#' @import Matrix
 
 
 # LpDominateRemove = function(coeflist){
@@ -710,12 +711,16 @@ Gurobi_sol = function(coeflist, p, exact = TRUE){
     nb[i] = ncol(coeflist[[i]])
   }
   n = length(Q)
-  A = matrix(0, nrow = B+1, ncol = n)
+  A = Matrix(nrow =  B+1, ncol = n, data = 0, sparse = TRUE)
   indx = c(0, cumsum(nb))
+  Ai = rep(B+1, 2*n)
+  Aj = rep(1:n, 2)
+  x = rep(1, 2*n)
   for(i in 1:B){
-    A[i,(indx[i]+1):indx[i+1]] = 1
-    A[B+1,(indx[i]+1):indx[i+1]] = coeflist[[i]][1,]
+    Ai[(indx[i]+1):indx[i+1]] = i
+    x[(n+indx[i]+1):(n+indx[i+1])] = coeflist[[i]][1,]
   }
+  A = sparseMatrix(Ai, Aj, x=x)
   model$A = A
   model$obj = Q
   model$modelsense = "min"
