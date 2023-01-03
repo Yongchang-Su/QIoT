@@ -55,7 +55,7 @@ $lower
 $fix
 [1] 0.00012
 ```
-and the statement is clearly rejected. Moreover, you can move on to more advanced inference like calculating confidence region of treatment effect vector.
+and the statement is clearly rejected at 5% significance level. Moreover, you can move on to more advanced inference like calculating confidence region of treatment effect vector.
 ```S
 ### Calculate lower limit of CIs of treatment effects
 CI_lower = block_conf_quant_larger(Z, Y, block, method.list.all)
