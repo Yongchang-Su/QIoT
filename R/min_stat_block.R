@@ -1,13 +1,13 @@
 #' min_stat_block
 #' 
-#' A function to calculate to calculate test statistics for null hypothesis: kth smallest treatment effect is less or equal to c.
+#' A function to calculate to calculate test statistics for null hypothesis: kth smallest treatment effect is less or equal to $c$.
 #' @param Z A numeric vector of treatment assignment. 0 indicates control and 1 treated.
 #' @param Y A numeric vector contains response values of the group.
 #' @param block A factor vector indicates to which blocks the units belong. 
-#' @param k A parameter in hypothesis test that kth smallest treatment effect is less or equal to c
-#' @param method.list.all A list that contains the method of the rank scores. If you use the same methods across all strata, method.list.all will only include 1 element stating that score. Otherwise, method.list.all[[s]] should be the method for stratum s. Available score functions: Wilcoxon, list(name = "Wilcoxon); Stephenson, list(name = "Stephenson", s = ?).  
+#' @param k A parameter in hypothesis test that kth smallest treatment effect is less or equal to $c$
+#' @param method.list.all A list that contains the method of the rank scores. If you use the same methods across all strata, method.list.all will only include 1 element stating that score. Otherwise, \code{method.list.all[[s]]} should be the method for stratum $s$. Available score functions: \code{Wilcoxon, list(name = "Wilcoxon)}; \code{Stephenson, list(name = "Stephenson", s = ?)}.  
 #' @param opt.method Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.
-#' @param ties A subvector of c("upper", "lower", "fix") indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function.
+#' @param ties A subvector of \code{c("upper", "lower", "fix")} indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function.
 #' @import Rcpp
 #' @import RcppArmadillo
 
