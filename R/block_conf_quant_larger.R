@@ -5,7 +5,7 @@
 #' @param Y A numeric vector contains response values of the group.
 #' @param block A factor vector indicates to which blocks the units belong. 
 #' @param quantiles Specify the quantiles of treatment effects that you want to calculate confidence intervals. It should be a subvector of integers from 1 to number of units. If NULL, it will calculate all quantiles.
-#' @param alternative Options: "greater", "less", "two.sided", which will give confidence intervals with forms: $(-\infty, upper)$, $(lower, \infty)$ and $(lower,upper)$, respectively. Default is "less".
+#' @param alternative Options: "greater", "less", "two.sided", which will give confidence intervals. Default is "less".
 #' @param method.list.all A list that contains the type of the rank scores. It should be a list with length equal to the number of strata. Default is \code{NULL}.
 #' @param opt.method Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used. Default is "Greedy"
 #' @param ties Options: "upper", "lower", "fix" indicating which tie-dealing methods we use to calculate confidence intervals. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function. Default is "fix".
