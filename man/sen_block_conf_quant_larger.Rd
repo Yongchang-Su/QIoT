@@ -8,8 +8,9 @@ sen_block_conf_quant_larger(
   Z,
   Y,
   block,
+  quantiles = NULL,
+  gam = 1,
   method.list.all = NULL,
-  Gam,
   opt.method = "Greedy",
   ties = "fix",
   switch = FALSE,
@@ -24,9 +25,11 @@ sen_block_conf_quant_larger(
 
 \item{block}{A factor vector indicates to which blocks the units belong.}
 
-\item{method.list.all}{A list that contains the method of the rank scores. It might vary among different blocks}
+\item{quantiles}{Specify which quantiles of treatment effects that you want to calculate confidence intervals. It should be a subvector of integers from 1 to number of units. If \code{quantiles = NULL}, it will calculate all quantiles. Default is NULL.}
 
-\item{Gam}{A parameter for sensitivity analysis}
+\item{gam}{A parameter for sensitivity analysis}
+
+\item{method.list.all}{A list that contains the method of the rank scores. It might vary among different blocks}
 
 \item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.}
 

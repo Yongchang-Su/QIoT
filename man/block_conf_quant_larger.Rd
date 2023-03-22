@@ -8,6 +8,7 @@ block_conf_quant_larger(
   Z,
   Y,
   block,
+  quantiles = NULL,
   method.list.all = NULL,
   opt.method = "Greedy",
   ties = "fix",
@@ -24,20 +25,24 @@ block_conf_quant_larger(
 
 \item{block}{A factor vector indicates to which blocks the units belong.}
 
-\item{method.list.all}{A list that contains the method of the rank scores. It might vary among different blocks}
+\item{quantiles}{Specify the quantiles of treatment effects that you want to calculate confidence intervals. It should be a subvector of integers from 1 to number of units. If NULL, it will calculate all quantiles.}
 
-\item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.}
+\item{method.list.all}{A list that contains the type of the rank scores. It should be a list with length equal to the number of strata. Default is \code{NULL}.}
 
-\item{ties}{ties = "upper", "lower" or "fix". It indicates which tie-dealing methods we use to calculate statistics.}
+\item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used. Default is "Greedy"}
 
-\item{stat.null}{Optional variable. You can enter the null distribution here by yourself. Otherwise it will be generated within the function.}
+\item{ties}{Options: "upper", "lower", "fix" indicating which tie-dealing methods we use to calculate confidence intervals. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function. Default is "fix".}
 
-\item{switch}{Logical variable. If true, the function uses switching treatment and control trick when calculating p-value.}
+\item{stat.null}{Null distribution of test statistics. If no input, then it will be generated automatically.}
 
-\item{null.max}{The total amount of values we use to approximate the null distribution.}
+\item{switch}{Logical variable. If true, the function uses switching treatment and control label is the number of treated units is less than that of control units in one stratum. Default is "False".}
 
-\item{alpha}{scalar. It equals to 1-confidence of the confidence region}
+\item{null.max}{The total amount of values we use to approximate the null distribution. Default is $10^5$.}
+
+\item{alpha}{scalar. Confidence level of the confidence region. Default is $0.1$.}
+
+\item{alternative}{Options: "greater", "less", "two.sided", which will give confidence intervals with forms: $(-\infty, upper)$, $(lower, \infty)$ and $(lower,upper)$, respectively. Default is "less".}
 }
 \description{
-A function to help determine confidence region with respect to k and c
+A function to help determine confidence region of treatment effects under SCRE.
 }

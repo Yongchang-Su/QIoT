@@ -11,7 +11,6 @@ pval_block(
   k,
   c,
   method.list.all,
-  Gam = 1,
   opt.method = "Greedy",
   ties = c("upper", "lower", "fix"),
   null.max = 10^5,
@@ -32,11 +31,9 @@ pval_block(
 
 \item{method.list.all}{A list that contains the method of the rank scores. It might vary among different blocks}
 
-\item{Gam}{A parameter for sensitivity analysis. If Gam = 1, the analysis is performed under normal setting. If Gam>1, then the analysis is under sensitivity setting.}
-
 \item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.}
 
-\item{ties}{A subvector of c("upper", "lower", "fix") indicating which tie-dealing methods we use to calculate p-values. "upper" will use the method that will produce maximum p-value, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function.}
+\item{ties}{A subvector of \code{c("upper", "lower", "fix")} indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function.}
 
 \item{null.max}{The total amount of values we use to approximate the null distribution.}
 
