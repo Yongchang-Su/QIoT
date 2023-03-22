@@ -10,11 +10,11 @@ pval_quantile_sen(
   block,
   k,
   c,
-  gam,
-  method.list.all,
+  alternative = "less",
+  gam = 1,
+  method.list.all = NULL,
   opt.method = "Greedy",
-  ties = c("upper", "lower", "fix"),
-  switch = FALSE
+  ties = c("upper", "lower", "fix")
 )
 }
 \arguments{
@@ -24,25 +24,25 @@ pval_quantile_sen(
 
 \item{block}{A factor vector indicates to which blocks the units belong.}
 
-\item{k}{A parameter in hypothesis test that at least k units have treatment effects less or equal to c}
+\item{k}{A parameter in the null hypothesis.}
 
-\item{c}{A parameter in hypothesis test that at least k units have treatment effects less or equal to c}
+\item{c}{A parameter in the null hypothesis.}
 
-\item{gam}{A parameter in sensitivity analysis controlling the odds of propensity scores.}
+\item{alternative}{Options: \code{"greater", "less", "two.sided"}, which correspond to different relationships between kth smallest treatment effect and c. For example, \code{alternative == "greater"} denotes null hypothesis that the kth smallest treatment effect is greater than c. Default is "less".}
+
+\item{gam}{A parameter in sensitivity analysis controlling the odds of propensity scores. Default is 1.}
 
 \item{method.list.all}{A list that contains the type of the rank scores. It should be a list with length equal to the number of strata. Default is \code{NULL}.}
 
-\item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used. Default is "Greedy"}
+\item{opt.method}{Algorithm that is used for optimization. Available algorithms are \code{"Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi"}. Gurobi installation is required for gurobi to be used. Default is \code{"Greedy"}.}
 
 \item{ties}{A subvector of \code{c("upper", "lower", "fix")} indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function. Default is \code{c("upper", "lower", "fix")}.}
-
-\item{switch}{Logical variable. If true, the function uses switching treatment and control trick when calculating p-value. Default is "False".}
 }
 \value{
 A list contains upper and lower bound and a special value of $p$-values depending on the tie-dealing method.
 }
 \description{
-A function to calculate valid p-value under sensitivity analysis for null hypothesis with respect to treatment effects.
+A function to calculate valid p-value under sensitivity analysis for null hypothesis with respect to treatment effects. Specifically, we are interested in testing kth smallest treatment effect is less than, greater than or not equal to c.
 }
 \examples{
 111

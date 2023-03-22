@@ -26,13 +26,13 @@ ci_quant_scre(
 
 \item{block}{A factor vector indicates to which blocks the units belong.}
 
-\item{quantiles}{Specify which quantiles of treatment effects that you want to calculate confidence intervals. It should be a subvector of integers from 1 to number of units. If \code{quantiles = NULL}, it will calculate all quantiles. Default is NULL.}
+\item{quantiles}{Specify which quantiles of treatment effects that you want to calculate confidence intervals. It should be a subvector of integers from 1 to number of units. If \code{quantiles == NULL}, it will calculate all quantiles. Default is NULL.}
 
-\item{alternative}{Options: "lower", "upper", "two.sided", which will give lower one-sided, upper one-sided and two-sided confidence intervals, respectively. Default is "upper".}
+\item{alternative}{Options: \code{"lower"}, \code{"upper"}, \code{"two.sided"}, which will give lower one-sided, upper one-sided and two-sided confidence intervals, respectively. Default is "upper".}
 
 \item{method.list.all}{A list that contains the type of the rank scores. It should be a list with length equal to the number of strata. Default is \code{NULL}.}
 
-\item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used. Default is "Greedy"}
+\item{opt.method}{Algorithm that is used for optimization. Available algorithms are \code{"Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi"}. Gurobi installation is required for gurobi to be used. Default is \code{"Greedy"}.}
 
 \item{ties}{A subvector of \code{c("upper", "lower", "fix")} indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function. Default is \code{c("upper", "lower", "fix")}.}
 
@@ -40,9 +40,9 @@ ci_quant_scre(
 
 \item{switch}{Logical variable. If true, the function uses switching treatment and control label is the number of treated units is less than that of control units in one stratum. Default is "False".}
 
-\item{null.max}{The total amount of values we use to approximate the null distribution. Default is $10^5$.}
+\item{null.max}{The total amount of values we use to approximate the null distribution. Default is \code{1e5}.}
 
-\item{alpha}{scalar. Confidence level of the confidence region. Default is $0.1$.}
+\item{alpha}{scalar. Confidence level of the confidence region. Default is \code{0.1}.}
 }
 \value{
 A list contains upper and lower limits of confidence intervals.

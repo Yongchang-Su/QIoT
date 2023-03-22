@@ -28,28 +28,30 @@ pval_quantile_scre(
 
 \item{c}{A parameter in the null hypothesis.}
 
-\item{alternative}{Options: "greater", "less", "two.sided", which correspond to null hypotheses in forms of $\tau_k\ge c$, $\tau_k\le c$, $\tau_k\ne c$, respectively. Default is "less".}
+\item{alternative}{Options: \code{"greater", "less", "two.sided"}, which correspond to different relationships between kth smallest treatment effect and c. For example, \code{alternative == "greater"} denotes null hypothesis that the kth smallest treatment effect is greater than c. Default is "less".}
 
 \item{method.list.all}{A list that contains the type of the rank scores. It should be a list with length equal to the number of strata. Default is \code{NULL}.}
 
-\item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used. Default is "Greedy"}
+\item{opt.method}{Algorithm that is used for optimization. Available algorithms are \code{"Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi"}. Gurobi installation is required for gurobi to be used. Default is \code{"Greedy"}.}
 
 \item{ties}{A subvector of \code{c("upper", "lower", "fix")} indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function. Default is \code{c("upper", "lower", "fix")}.}
 
-\item{null.max}{The total amount of values we use to approximate the null distribution. Default is $10^5$.}
+\item{null.max}{The total amount of values we use to approximate the null distribution. Default is \code{1e5}.}
 }
 \value{
 A list contains upper and lower bound and a special value of $p$-values depending on the tie-dealing method.
 }
 \description{
-A function to calculate valid p-value under SCRE for null hypothesis with respect to treatment effects.
+A function to calculate valid p-value under SCRE for null hypothesis with respect to treatment effects. Specifically, we are interested in testing kth smallest treatment effect is less than, greater than or not equal to c.
 }
 \examples{
 data("cadmium")
 Y = cadmium$cadmium
 block = cadmium$mset
 Z = cadmium$z
+### use stratified Wilcoxon test statistics for all strata. 
 method.list.all = list()
 method.list.all[[1]] = list(name = "Wilcoxon") 
+### Test null hypothesis that 80\% quantile of treatment effects is less than or equal to 0.
 pval_quantile_scre(Z=Z,Y=Y,block=block,k=floor(0.8*length(Y)),c=0,method.list.all=method.list.all)
 }
