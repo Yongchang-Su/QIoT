@@ -2,8 +2,6 @@
 
 export(ci_quant_scre)
 export(ci_quantile_sen)
-export(min_stat_block)
-export(null_dist_block)
 export(pval_quantile_scre)
 export(pval_quantile_sen)
 import(Matrix)

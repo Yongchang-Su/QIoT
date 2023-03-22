@@ -22,9 +22,9 @@ min_stat_block(
 
 \item{block}{A factor vector indicates to which blocks the units belong.}
 
-\item{k}{A parameter in hypothesis test that kth smallest treatment effect is less or equal to $c$}
+\item{k}{A parameter in hypothesis test that kth smallest treatment effect is less or equal to $c$.}
 
-\item{method.list.all}{A list that contains the method of the rank scores. If you use the same methods across all strata, method.list.all will only include 1 element stating that score. Otherwise, \code{method.list.all[[s]]} should be the method for stratum $s$. Available score functions: \code{Wilcoxon, list(name = "Wilcoxon)}; \code{Stephenson, list(name = "Stephenson", s = ?)}.}
+\item{method.list.all}{A list that contains the method of the rank scores. If you use the same methods across all strata, method.list.all will only include 1 element stating that score. Otherwise, \code{method.list.all[[s]]} should be the method for stratum $s$. Available score functions: \code{Wilcoxon, list(name = "Wilcoxon)}; \code{Stephenson, list(name = "Stephenson", s)}.}
 
 \item{opt.method}{Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.}
 
