@@ -41,7 +41,7 @@ block_conf_quant_larger(
 
 \item{alpha}{scalar. Confidence level of the confidence region. Default is $0.1$.}
 
-\item{alternative}{Options: "greater", "less", "two.sided", which will give confidence intervals with forms: $(-\infty, upper)$, $(lower, \infty)$ and $(lower,upper)$, respectively. Default is "less".}
+\item{alternative}{Options: "greater", "less", "two.sided", which will give confidence intervals. Default is "less".}
 }
 \description{
 A function to help determine confidence region of treatment effects under SCRE.
