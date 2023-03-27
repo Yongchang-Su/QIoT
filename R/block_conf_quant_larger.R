@@ -50,7 +50,7 @@ block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, method.list.a
   
   # > threshold <===> p-value <= alpha #
   thres = sort(stat.null, decreasing = TRUE)[ floor(length(stat.null) * alpha) + 1] 
-  if(quantiles){
+  if(!is.null(quantiles)){
     quantiles = sort(quantiles)
     c_conf1 = rep(NA, length(quantiles))
     for (k in length(quantiles):1) {

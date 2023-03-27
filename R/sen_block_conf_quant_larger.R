@@ -65,7 +65,7 @@ sen_block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, gam = 1, 
     }
   }
   thres = qnorm(1-alpha, mean = u, sd = sqrt(v))
-  if(quantiles){
+  if(!is.null(quantiles)){
     quantiles = sort(quantiles)
     c_conf1 = rep(NA, length(quantiles))
     for (k in length(quantiles):1) {

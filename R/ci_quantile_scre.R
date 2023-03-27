@@ -24,7 +24,7 @@
 #' method.list.all = list()
 #' method.list.all[[1]] = list(name = "Wilcoxon") 
 #' ### Calculate 90% confidence intervals for the top 10 percent largest treatment effects.
-#' CIs = ci_quantile_scre(Z,Y,block,quantiles=floor(0.9*n):n,alternative = "two-sided",method.list.all=method.list.all,opt.method = "Greedy", switch = TRUE, null.max=10^5)
+#' CIs = ci_quantile_scre(Z,Y,block,quantiles=floor(0.9*n):n,alternative = "two.sided",method.list.all=method.list.all,opt.method = "Greedy", switch = TRUE, null.max=10^5)
 #' 
 #' @export
 
@@ -45,6 +45,8 @@ ci_quantile_scre <- function(Z, Y, block, quantiles = NULL, alternative = "less"
     res$LB = LB    
     UB = block_conf_quant_larger(Z, -Y, block, quantiles, method.list.all, opt.method, ties, stat.null, switch, null.max,  alpha/2)
     res$LB = -rev(UB)    
+  }else{
+    warnings("Invalid input for alternative")
   }
     
   return(res)
