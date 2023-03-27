@@ -45,6 +45,15 @@ A list contains upper and lower bound and a special value of $p$-values dependin
 A function to calculate valid p-value under sensitivity analysis for null hypothesis with respect to treatment effects. Specifically, we are interested in testing kth smallest treatment effect is less than, greater than or not equal to c.
 }
 \examples{
-111
- 
+data("cadmium")
+Y = cadmium$cadmium
+block = cadmium$mset
+Z = cadmium$z
+### use stratified Wilcoxon test statistics for all strata. 
+method.list.all = list()
+method.list.all[[1]] = list(name = "Wilcoxon") 
+### Test null hypothesis that 90\% quantile of treatment effects is less than or equal to 0 under Gamma = 3.
+p1 = pval_quantile_sen(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=0, gam = 3, method.list.all=method.list.all)
+### Test null hypothesis that 90\% quantile of treatment effects is greater than or equal to 1 under Gamma = 3.
+p2 = pval_quantile_sen(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=1,alternative="greater",gam=3,method.list.all=method.list.all)
 }

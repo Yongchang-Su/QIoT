@@ -12,8 +12,19 @@
 #' @param opt.method Algorithm that is used for optimization. Available algorithms are \code{"Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi"}. Gurobi installation is required for gurobi to be used. Default is \code{"Greedy"}.
 #' @param ties A subvector of \code{c("upper", "lower", "fix")} indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function. Default is \code{c("upper", "lower", "fix")}.
 #' @returns A list contains upper and lower bound and a special value of $p$-values depending on the tie-dealing method.
-#' @examples 111
-#'  
+#' @examples 
+#' data("cadmium")
+#' Y = cadmium$cadmium
+#' block = cadmium$mset
+#' Z = cadmium$z
+#' ### use stratified Wilcoxon test statistics for all strata. 
+#' method.list.all = list()
+#' method.list.all[[1]] = list(name = "Wilcoxon") 
+#' ### Test null hypothesis that 90% quantile of treatment effects is less than or equal to 0 under Gamma = 3.
+#' p1 = pval_quantile_sen(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=0, gam = 3, method.list.all=method.list.all)
+#' ### Test null hypothesis that 90% quantile of treatment effects is greater than or equal to 1 under Gamma = 3.
+#' p2 = pval_quantile_sen(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=1,alternative="greater",gam=3,method.list.all=method.list.all)
+
 #' @export
 
 

@@ -9,6 +9,7 @@ ci_quantile_sen(
   Y,
   block,
   gam = 1,
+  quantiles = NULL,
   alternative = "upper",
   method.list.all = NULL,
   opt.method = "Greedy",
@@ -27,6 +28,8 @@ ci_quantile_sen(
 
 \item{gam}{A parameter for sensitivity analysis. Default is 1.}
 
+\item{quantiles}{Specify which quantiles of treatment effects that you want to calculate confidence intervals. It should be a subvector of integers from 1 to number of units. If \code{quantiles == NULL}, it will calculate all quantiles. Default is NULL.}
+
 \item{alternative}{Options: \code{"lower"}, \code{"upper"}, \code{"two.sided"}, which will give lower one-sided, upper one-sided and two-sided confidence intervals, respectively. Default is "upper".}
 
 \item{method.list.all}{A list that contains the type of the rank scores. It should be a list with length equal to the number of strata. Default is \code{NULL}.}
@@ -41,8 +44,6 @@ ci_quantile_sen(
 
 \item{alpha}{scalar. Confidence level of the confidence region. Default is \code{0.1}.}
 
-\item{quantiles}{Specify which quantiles of treatment effects that you want to calculate confidence intervals. It should be a subvector of integers from 1 to number of units. If \code{quantiles == NULL}, it will calculate all quantiles. Default is NULL.}
-
 \item{stat.null}{Null distribution of test statistics. If no input, then it will be generated automatically.}
 }
 \value{
@@ -52,5 +53,15 @@ A list contains upper and lower limits of confidence intervals.
 A function to help determine confidence region with respect to k and c in sensitivity analysis
 }
 \examples{
-111
+data("cadmium")
+Y = cadmium$cadmium
+block = cadmium$mset
+Z = cadmium$z
+n = length(Z)
+### use stratified Wilcoxon test statistics for all strata. 
+method.list.all = list()
+method.list.all[[1]] = list(name = "Wilcoxon") 
+### Calculate 90\% confidence intervals for the top 10 percent largest treatment effects under Gamma = 3.
+CIs = ci_quantile_sen(Z,Y,block,gam=3,quantiles=floor(0.9*n):n,alternative = "two-sided",method.list.all=method.list.all,opt.method = "Greedy", switch = TRUE, null.max=10^5)
+
 }

@@ -1,4 +1,6 @@
 #' min_stat_block
+#' @noRd
+#' @keywords internal
 
 min_stat_block <- function(Z, Y, block, k, c, method.list.all, opt.method="Greedy", ties = c("upper", "lower", "fix")){
   if(opt.method %in% c("LP_gurobi", "ILP_gurobi","PWL_gurobi","PWLint_gurobi")){

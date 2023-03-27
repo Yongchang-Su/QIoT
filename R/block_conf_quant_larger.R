@@ -13,6 +13,8 @@
 #' @param switch Logical variable. If true, the function uses switching treatment and control label is the number of treated units is less than that of control units in one stratum. Default is "False".
 #' @param null.max The total amount of values we use to approximate the null distribution. Default is $10^5$.
 #' @param alpha scalar. Confidence level of the confidence region. Default is $0.1$.
+#' @noRd
+#' @keywords internal
 
 
 block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, method.list.all = NULL, opt.method = 'Greedy', ties = "fix", stat.null = NULL, switch = FALSE, null.max = 10^5,  alpha = 0.1){

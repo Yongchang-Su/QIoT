@@ -1,5 +1,7 @@
 #' sen_ls
-#' 
+#' @noRd
+#' @keywords internal
+
 
 sen_ls = function(Z,Y,block,k,c,gam,method.list.all,opt.method="Greedy", ties = c("upper", "lower", "fix")){
   if(!is.factor(block)){

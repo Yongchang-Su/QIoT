@@ -15,10 +15,21 @@
 #' @param null.max The total amount of values we use to approximate the null distribution. Default is \code{1e5}.
 #' @param alpha scalar. Confidence level of the confidence region. Default is \code{0.1}.
 #' @returns A list contains upper and lower limits of confidence intervals. 
-#' @examples 111
+#' @examples 
+#' data("cadmium")
+#' Y = cadmium$cadmium
+#' block = cadmium$mset
+#' Z = cadmium$z
+#' n = length(Z)
+#' ### use stratified Wilcoxon test statistics for all strata. 
+#' method.list.all = list()
+#' method.list.all[[1]] = list(name = "Wilcoxon") 
+#' ### Calculate 90% confidence intervals for the top 10 percent largest treatment effects under Gamma = 3.
+#' CIs = ci_quantile_sen(Z,Y,block,gam=3,quantiles=floor(0.9*n):n,alternative = "two-sided",method.list.all=method.list.all,opt.method = "Greedy", switch = TRUE, null.max=10^5)
+#' 
 #' @export
 
-ci_quantile_sen <- function(Z, Y, block, gam = 1, alternative = "upper", method.list.all = NULL, opt.method = 'Greedy', ties = "fix",switch = FALSE, null.max = 10^5,  alpha = 0.1){
+ci_quantile_sen <- function(Z, Y, block, gam = 1, quantiles=NULL,alternative = "upper", method.list.all = NULL, opt.method = 'Greedy', ties = "fix",switch = FALSE, null.max = 10^5,  alpha = 0.1){
   res = list()
   if(alternative == "upper"){
     LB = sen_block_conf_quant_larger(Z, Y, block, quantiles, gam, method.list.all, opt.method, ties, stat.null, switch, null.max,  alpha)

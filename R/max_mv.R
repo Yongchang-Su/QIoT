@@ -1,4 +1,6 @@
 #' max_mv
+#' @noRd
+#' @keywords internal
 
 max_mv = function(phi, gam){
   m = NULL

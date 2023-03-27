@@ -20,8 +20,10 @@
 #' ### use stratified Wilcoxon test statistics for all strata. 
 #' method.list.all = list()
 #' method.list.all[[1]] = list(name = "Wilcoxon") 
-#' ### Test null hypothesis that 80% quantile of treatment effects is less than or equal to 0.
-#' pval_quantile_scre(Z=Z,Y=Y,block=block,k=floor(0.8*length(Y)),c=0,method.list.all=method.list.all)
+#' ### Test null hypothesis that 90% quantile of treatment effects is less than or equal to 0.
+#' p1 = pval_quantile_scre(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=0,method.list.all=method.list.all)
+#' ### Test null hypothesis that 90% quantile of treatment effects is greater than or equal to 1.
+#' p2 = pval_quantile_scre(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=1,alternative="greater",method.list.all=method.list.all)
 #' @export
 
 

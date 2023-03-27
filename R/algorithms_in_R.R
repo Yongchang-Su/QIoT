@@ -1,6 +1,8 @@
 #' Algorithms that calculate test statistics
 #' @import lpSolveAPI 
 #' @import Matrix
+#' @noRd
+#' @keywords internal
 
 
 # LpDominateRemove = function(coeflist){
