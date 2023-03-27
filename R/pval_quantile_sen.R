@@ -29,6 +29,7 @@
 
 
 pval_quantile_sen = function(Z,Y,block,k,c,alternative = "less", gam = 1, method.list.all = NULL, opt.method="Greedy", ties = c("upper", "lower", "fix")){
+  n = length(Z)
   if(alternative == "two.sided"){
     pval1 = sen_ls(Z, Y, block, k, c, gam, method.list.all, opt.method, ties , null.max)
     pval2 = sen_ls(Z, -Y, block, n+1-k, -c, gam, method.list.all, opt.method, ties , null.max)

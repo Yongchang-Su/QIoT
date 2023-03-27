@@ -28,6 +28,7 @@
 
 
 pval_quantile_scre <- function(Z, Y, block, k, c, alternative = "less", method.list.all = NULL, opt.method = "Greedy", ties = c("upper", "lower", "fix"), null.max = 10^5 ){
+  n = length(Y)
   if(alternative == "two.sided"){
     pval1 = pval_block(Z, Y, block, k, c,method.list.all,opt.method, ties , null.max)
     pval2 = pval_block(Z, -Y, block, n+1-k, -c,method.list.all, opt.method, ties , null.max)
