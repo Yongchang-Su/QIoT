@@ -1,6 +1,8 @@
 #' Algorithms that calculate test statistics
 #' @import lpSolveAPI 
 #' @import Matrix
+#' @import Rcpp
+#' @import RcppArmadillo
 #' @noRd
 #' @keywords internal
 
