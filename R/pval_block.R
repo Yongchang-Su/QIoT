@@ -12,6 +12,7 @@
 #' @param null.max The total amount of values we use to approximate the null distribution.
 #' @param stat.null Optional variable. You can enter the null distribution here by yourself. Otherwise it will be generated within the function.
 #' @param switch Logical variable. If true, the function uses switching treatment and control trick when calculating p-value.
+#' @noRd
 
 
 pval_block <- function(Z, Y, block, k, c,method.list.all, opt.method = "Greedy", ties = c("upper", "lower", "fix"),null.max = 10^5, stat.null = NULL, switch = FALSE){

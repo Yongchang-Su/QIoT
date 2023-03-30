@@ -3,6 +3,7 @@
 #' A function to get optimal monotone transformation
 #' @param a Numeric vector that needs to be transformed.
 #' @keywords Optimal monotone transformation
+#' @noRd
 
 ### transform the sequence to a monotone decreasing one with larger cumulative sums
 opt_trans = function(a){
