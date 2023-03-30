@@ -10,13 +10,12 @@
 #' @param opt.method Algorithm that is used for optimization. Available algorithms are "Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi". Gurobi installation is required for gurobi to be used.
 #' @param ties ties = "upper", "lower" or "fix". It indicates which tie-dealing methods we use to calculate statistics.
 #' @param switch Logical variable. If true, the function uses switching treatment and control trick when calculating p-value.
-#' @param null.max The total amount of values we use to approximate the null distribution.
 #' @param alpha scalar. It equals to 1-confidence of the confidence region
 #' @noRd
 #' @keywords internal
 
 
-sen_block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, gam = 1, method.list.all = NULL, opt.method = 'Greedy', ties = "fix",switch = FALSE, null.max = 10^5,  alpha = 0.1){
+sen_block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, gam = 1, method.list.all = NULL, opt.method = 'Greedy', ties = "fix",switch = FALSE, alpha = 0.1){
   if(!is.factor(block)){
     block = as.factor(block)
   } 

@@ -15,7 +15,6 @@ ci_quantile_sen(
   opt.method = "Greedy",
   ties = "fix",
   switch = FALSE,
-  null.max = 10^5,
   confidence = 0.9
 )
 }
@@ -39,8 +38,6 @@ ci_quantile_sen(
 \item{ties}{A subvector of \code{c("upper", "lower", "fix")} indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function. Default is \code{c("upper", "lower", "fix")}.}
 
 \item{switch}{Logical variable. If true, the function uses switching treatment and control label is the number of treated units is less than that of control units in one stratum. Default is "False".}
-
-\item{null.max}{The total amount of values we use to approximate the null distribution. Default is \code{1e5}.}
 
 \item{confidence}{scalar between 0 and 1. Confidence level of the confidence region. Default is \code{0.9}.}
 

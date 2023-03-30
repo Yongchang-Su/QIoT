@@ -12,7 +12,6 @@
 #' @param ties A subvector of \code{c("upper", "lower", "fix")} indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function. Default is \code{c("upper", "lower", "fix")}.
 #' @param stat.null Null distribution of test statistics. If no input, then it will be generated automatically.
 #' @param switch Logical variable. If true, the function uses switching treatment and control label is the number of treated units is less than that of control units in one stratum. Default is "False".
-#' @param null.max The total amount of values we use to approximate the null distribution. Default is \code{1e5}.
 #' @param confidence scalar between 0 and 1. Confidence level of the confidence region. Default is \code{0.9}.
 #' @returns A list contains upper and lower limits of confidence intervals. 
 #' @examples 
@@ -29,21 +28,21 @@
 #' 
 #' @export
 
-ci_quantile_sen <- function(Z, Y, block, gam = 1, quantiles=NULL,alternative = "upper", method.list.all = NULL, opt.method = 'Greedy', ties = "fix",switch = FALSE, null.max = 10^5,  confidence = 0.9){
+ci_quantile_sen <- function(Z, Y, block, gam = 1, quantiles=NULL,alternative = "upper", method.list.all = NULL, opt.method = 'Greedy', ties = "fix",switch = FALSE, confidence = 0.9){
   alpha = 1 - confidence
   res = list()
   if(alternative == "upper"){
-    LB = sen_block_conf_quant_larger(Z, Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha)
+    LB = sen_block_conf_quant_larger(Z, Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, alpha)
     res$LB = LB
   }
   if(alternative == "lower"){
-    UB = sen_block_conf_quant_larger(Z, -Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha)
+    UB = sen_block_conf_quant_larger(Z, -Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, alpha)
     res$UB = -rev(UB)
   }
   if(alternative == "two.sided"){
-    LB = sen_block_conf_quant_larger(Z, Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha/2)
+    LB = sen_block_conf_quant_larger(Z, Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, alpha/2)
     res$LB = LB    
-    UB = sen_block_conf_quant_larger(Z, -Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha/2)
+    UB = sen_block_conf_quant_larger(Z, -Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, alpha/2)
     res$UB = -rev(UB)    
   }else{
     warnings("Invalid input for alternative")
