@@ -16,7 +16,7 @@ ci_quantile_sen(
   ties = "fix",
   switch = FALSE,
   null.max = 10^5,
-  alpha = 0.1
+  confidence = 0.9
 )
 }
 \arguments{
@@ -42,7 +42,7 @@ ci_quantile_sen(
 
 \item{null.max}{The total amount of values we use to approximate the null distribution. Default is \code{1e5}.}
 
-\item{alpha}{scalar. Confidence level of the confidence region. Default is \code{0.1}.}
+\item{confidence}{scalar between 0 and 1. Confidence level of the confidence region. Default is \code{0.9}.}
 
 \item{stat.null}{Null distribution of test statistics. If no input, then it will be generated automatically.}
 }

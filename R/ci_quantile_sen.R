@@ -38,13 +38,13 @@ ci_quantile_sen <- function(Z, Y, block, gam = 1, quantiles=NULL,alternative = "
   }
   if(alternative == "lower"){
     UB = sen_block_conf_quant_larger(Z, -Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha)
-    res$LB = -rev(UB)
+    res$UB = -rev(UB)
   }
   if(alternative == "two.sided"){
     LB = sen_block_conf_quant_larger(Z, Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha/2)
     res$LB = LB    
     UB = sen_block_conf_quant_larger(Z, -Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha/2)
-    res$LB = -rev(UB)    
+    res$UB = -rev(UB)    
   }else{
     warnings("Invalid input for alternative")
   }
