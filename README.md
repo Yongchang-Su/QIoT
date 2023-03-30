@@ -1,6 +1,6 @@
  # QIoT
 
-This package is build for quantiles inference of treatment effects. It mainly involves hypothesis testing and constructing confidence regions for treatment effects under stratified randomized experiments and observational studies.
+This package is build for quantiles inference of treatment effects. It mainly involves hypothesis testing and constructing confidence regions for quantiles of treatment effects under stratified randomized experiments and observational studies.
 
 ## Install
 with `devtools `:
@@ -13,11 +13,10 @@ devtools::install_github("Yongchang-Su/QIoT")
 
 Here we make a brief introduction to the functions the packages contains.
 
-- p_val_block: We are interested in null hypothesis with form $\tau_{k}\le c$, where $\tau_{1}\le \ldots \le \tau_{n}$ are treatment effects in ascending order. Different algorithms are available for the calculation, including greedy algorithm (efficient but only approximate), dynamic programming (exact but less efficient), as well as calculating with gurobi optimizer (installation of gurobi required). This function outputs valid $p$-values for the null hypothesis. In addition, different tie-dealing method might result in different $p$-values. Therefore in default, the function outputs both upper and lower bound as well as another special $p$-values that corresponds to control first, treatment first and first come first serve tie-dealing methods. If you want to do hypothesis testing in sensitivity analysis setting, you can enter a value for parameter gam.
-- p_val_block_sides: This $p$-value calculating function generalize previous form of null hypotheses to $\tau_{k}\ge c$ and $\tau_{k}\ne c$.
-- block_conf_quant_larger: This function outputs a vector of length $n$, with $i$-th element being the lower limit of confidence interval for $\tau_{i}$ with certain confidence. We showed in our paper that those confidence intervals combined forms the confidence region for all treatment effects with the same confidence.
-- sen_ls_p: This function generates $p$-values in observational studies under large-sample approximation. This method performs more powerful test but only asymptotically valid.
-- sen_block_conf_quant_larger: This is the version of block_conf_quant_larger in sensitivity analysis with different choice of gam. 
+- *pval_quantile_scre*: We are interested in null hypotheses like $\tau_{k}\le c$, where $\tau_{1}\le \ldots \le \tau_{n}$ are treatment effects in ascending order. Different algorithms are available for the calculation, including greedy algorithm (efficient but only approximately optimal), dynamic programming (exact but less efficient), as well as calculating with gurobi optimizer (installation of gurobi required). This function outputs valid $p$-values for the null hypothesis. Similarly, one can test null hypothese such as $\tau_{k}\ge c$ and $\tau_{k}\ne c$, with the help of the input parameter "alternative". In addition, different tie-dealing method might result in different $p$-values. Therefore in default, the function outputs both upper and lower bound as well as another special $p$-values that corresponds to control first, treatment first and first come first serve tie-dealing methods. 
+- *pval_quantile_sen*: This function does the same hypothesis testing described in *pval_quantile_scre* under the sensitivity analysis setting. In addition, the $p$-value calculated here is only asymptotically valid.
+- *ci_quantile_scre*: The function is built for calculating confidence region for treatment effects under stratified completely randomized experiment. The output of the function is a list containing upper bounds and lower bounds for effects. The "quantiles" parameter allows user to specify the quantiles of treatment effects she wants to calculate. The "alternative" parameter determines whether lower or upper one-sided, or two-sided confidence interval is favored.
+- *ci_quantile_sen*: The function calculates confidence region for treatment effects under sensitivity analysis, with the rest of the settings similar to that of *ci_quantile_scre*.
 
 ## Data
 One set of data used in the paper is included in the package.
@@ -42,23 +41,24 @@ method.list.all = list()
 method.list.all[[1]] = list(name = "Stephenson", s=3)
 
 ### Calculate p-values for null that 10th largest treatment effect is no more than 3
-pval_block(Z, Y, block, k = 90, c = 3, method.list.all)
+pval_quantile_scre(Z, Y, block, k = 90, c = 3, method.list.all = method.list.all)
 ```
 with output similar to
 ```S
 $upper
-[1] 0.00012
+[1] 0.00092
 
 $lower
-[1] 0.00012
+[1] 0.00092
 
 $fix
-[1] 0.00012
+[1] 0.00092
 ```
 and the statement is clearly rejected at 5% significance level. Moreover, you can move on to more advanced inference like calculating confidence region of treatment effect vector.
 ```S
 ### Calculate lower limit of CIs of treatment effects
-CI_lower = block_conf_quant_larger(Z, Y, block, method.list.all)
+CIs = ci_quantile_scre(Z, Y, block, method.list.all = method.list.all)
+CI_lower = CIs$LB
 plot(CI_lower[CI_lower>-Inf], (1:length(CI_lower))[CI_lower>-Inf], type = "p", xlab = "c", ylab = "k", cex = 1.5, col = "black", pch = 18)
 segments(CI_lower[CI_lower>-Inf], (1:length(CI_lower))[CI_lower>-Inf], 5, (1:length(CI_lower))[CI_lower>-Inf], lty= 2)
 ```
