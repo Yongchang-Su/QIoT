@@ -29,7 +29,7 @@
 #' @export
 
 
-ci_quantile_scre <- function(Z, Y, block, quantiles = NULL, alternative = "less", method.list.all = NULL, opt.method = 'Greedy', ties = "fix", stat.null = NULL, switch = FALSE, null.max = 10^5,  confidence = 0.9){
+ci_quantile_scre <- function(Z, Y, block, quantiles = NULL, alternative = "upper", method.list.all = NULL, opt.method = 'Greedy', ties = "fix", stat.null = NULL, switch = FALSE, null.max = 10^5,  confidence = 0.9){
   res = list()
   alpha = 1 - confidence
   if(alternative == "upper"){

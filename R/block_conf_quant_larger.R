@@ -53,7 +53,7 @@ block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, method.list.a
   cup = max(Y[Z==1]) - min(Y[Z==0]) + 0.01
   cdown = min(Y[Z==1]) - max(Y[Z==0]) - 0.01
   cmid = (cup+cdown)/2
-  if(!is.null(quantiles)){
+  if(is.null(quantiles)){
     quantiles = 1:n
   }
   quantiles = sort(quantiles)
