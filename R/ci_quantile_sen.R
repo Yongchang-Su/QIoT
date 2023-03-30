@@ -13,7 +13,7 @@
 #' @param stat.null Null distribution of test statistics. If no input, then it will be generated automatically.
 #' @param switch Logical variable. If true, the function uses switching treatment and control label is the number of treated units is less than that of control units in one stratum. Default is "False".
 #' @param null.max The total amount of values we use to approximate the null distribution. Default is \code{1e5}.
-#' @param alpha scalar. Confidence level of the confidence region. Default is \code{0.1}.
+#' @param confidence scalar between 0 and 1. Confidence level of the confidence region. Default is \code{0.9}.
 #' @returns A list contains upper and lower limits of confidence intervals. 
 #' @examples 
 #' data("cadmium")
@@ -29,20 +29,21 @@
 #' 
 #' @export
 
-ci_quantile_sen <- function(Z, Y, block, gam = 1, quantiles=NULL,alternative = "upper", method.list.all = NULL, opt.method = 'Greedy', ties = "fix",switch = FALSE, null.max = 10^5,  alpha = 0.1){
+ci_quantile_sen <- function(Z, Y, block, gam = 1, quantiles=NULL,alternative = "upper", method.list.all = NULL, opt.method = 'Greedy', ties = "fix",switch = FALSE, null.max = 10^5,  confidence = 0.9){
+  alpha = 1 - confidence
   res = list()
   if(alternative == "upper"){
-    LB = sen_block_conf_quant_larger(Z, Y, block, quantiles, gam, method.list.all, opt.method, ties, stat.null, switch, null.max,  alpha)
+    LB = sen_block_conf_quant_larger(Z, Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha)
     res$LB = LB
   }
   if(alternative == "lower"){
-    UB = sen_block_conf_quant_larger(Z, -Y, block, quantiles, gam, method.list.all, opt.method, ties, stat.null, switch, null.max,  alpha)
+    UB = sen_block_conf_quant_larger(Z, -Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha)
     res$LB = -rev(UB)
   }
   if(alternative == "two.sided"){
-    LB = sen_block_conf_quant_larger(Z, Y, block, quantiles, gam, method.list.all, opt.method, ties, stat.null, switch, null.max,  alpha/2)
+    LB = sen_block_conf_quant_larger(Z, Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha/2)
     res$LB = LB    
-    UB = sen_block_conf_quant_larger(Z, -Y, block, quantiles, gam, method.list.all, opt.method, ties, stat.null, switch, null.max,  alpha/2)
+    UB = sen_block_conf_quant_larger(Z, -Y, block, quantiles, gam, method.list.all, opt.method, ties, switch, null.max,  alpha/2)
     res$LB = -rev(UB)    
   }else{
     warnings("Invalid input for alternative")
