@@ -54,69 +54,37 @@ block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, method.list.a
   cdown = min(Y[Z==1]) - max(Y[Z==0]) - 0.01
   cmid = (cup+cdown)/2
   if(!is.null(quantiles)){
-    quantiles = sort(quantiles)
-    c_conf1 = rep(NA, length(quantiles))
-    for (k in length(quantiles):1) {
-      up = unlist(min_stat_block(Z,Y,block,quantiles[k],cdown,method.list.all,opt.method, ties))
-      if(up>thres & quantiles[k]!= n){
-        c_conf1[k] = cmid
-        next
-      }
-      cdown = min(Y[Z==1]) - max(Y[Z==0]) - 0.01
-      up = unlist(min_stat_block(Z,Y,block,quantiles[k],cdown,method.list.all,opt.method, ties))
-      if(up<thres){
-        c_conf1[1:k] = -Inf
-        break
-      }else{
-        repeat{
-          cmid = (cup+cdown)/2 
-          mid = unlist(min_stat_block(Z,Y,block,quantiles[k],cmid,method.list.all,opt.method, ties))
-          if(mid>thres){
-            cdown = cmid
-          }else{
-            cup = cmid
-          }
-          
-          if(abs(cup-cdown)<(1e-6)){
-            c_conf1[k] = cmid
-            break
-          }
-        }
-      }      
-    }
-  }else{
-    c_conf1 = rep(NA, n)
-    # range of c #
-    
-    for(k in n:(n-mn)){
-      up = unlist(min_stat_block(Z,Y,block,k,cdown,method.list.all,opt.method, ties))
-      if(up>thres & k!= n){
-        c_conf1[k] = cmid
-        next
-      }
-      cdown = min(Y[Z==1]) - max(Y[Z==0]) - 0.01
-      up = unlist(min_stat_block(Z,Y,block,k,cdown,method.list.all,opt.method, ties))
-      if(up<thres){
-        c_conf1[1:k] = -Inf
-        break
-      }else{
-        repeat{
-          cmid = (cup+cdown)/2 
-          mid = unlist(min_stat_block(Z,Y,block,k,cmid,method.list.all,opt.method, ties))
-          if(mid>thres){
-            cdown = cmid
-          }else{
-            cup = cmid
-          }
-          
-          if(abs(cup-cdown)<(1e-6)){
-            c_conf1[k] = cmid
-            break
-          }
-        }
-      }
-    }    
+    quantiles = 1:n
   }
-  
+  quantiles = sort(quantiles)
+  c_conf1 = rep(NA, length(quantiles))
+  for (k in length(quantiles):1) {
+    up = unlist(min_stat_block(Z,Y,block,quantiles[k],cdown,method.list.all,opt.method, ties))
+    if(up>thres & quantiles[k]!= n){
+      c_conf1[k] = cmid
+      next
+    }
+    cdown = min(Y[Z==1]) - max(Y[Z==0]) - 0.01
+    up = unlist(min_stat_block(Z,Y,block,quantiles[k],cdown,method.list.all,opt.method, ties))
+    if(up<thres){
+      c_conf1[1:k] = -Inf
+      break
+    }else{
+      repeat{
+        cmid = (cup+cdown)/2 
+        mid = unlist(min_stat_block(Z,Y,block,quantiles[k],cmid,method.list.all,opt.method, ties))
+        if(mid>thres){
+          cdown = cmid
+        }else{
+          cup = cmid
+        }
+        
+        if(abs(cup-cdown)<(1e-6)){
+          c_conf1[k] = cmid
+          break
+        }
+      }
+    }      
+  }
   return(c_conf1 )
 }
