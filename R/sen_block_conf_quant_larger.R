@@ -65,6 +65,9 @@ sen_block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, gam = 1, 
     }
   }
   thres = qnorm(1-alpha, mean = u, sd = sqrt(v))
+  cup = max(Y[Z==1]) - min(Y[Z==0]) + 0.01
+  cdown = min(Y[Z==1]) - max(Y[Z==0]) - 0.01
+  cmid = (cup+cdown)/2
   if(!is.null(quantiles)){
     quantiles = sort(quantiles)
     c_conf1 = rep(NA, length(quantiles))
@@ -99,9 +102,6 @@ sen_block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, gam = 1, 
   }else{
     c_conf1 = rep(NA, n)
     # range of c #
-    cup = max(Y[Z==1]) - min(Y[Z==0]) + 0.01
-    cdown = min(Y[Z==1]) - max(Y[Z==0]) - 0.01
-    cmid = (cup+cdown)/2
     
     for(k in n:(n-mn)){
       up = unlist(min_stat_block(Z,Y,block,k,cdown,method.list.all,opt.method, ties))

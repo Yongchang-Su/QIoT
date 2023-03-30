@@ -50,6 +50,9 @@ block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, method.list.a
   
   # > threshold <===> p-value <= alpha #
   thres = sort(stat.null, decreasing = TRUE)[ floor(length(stat.null) * alpha) + 1] 
+  cup = max(Y[Z==1]) - min(Y[Z==0]) + 0.01
+  cdown = min(Y[Z==1]) - max(Y[Z==0]) - 0.01
+  cmid = (cup+cdown)/2
   if(!is.null(quantiles)){
     quantiles = sort(quantiles)
     c_conf1 = rep(NA, length(quantiles))
@@ -84,9 +87,6 @@ block_conf_quant_larger <- function(Z, Y, block, quantiles = NULL, method.list.a
   }else{
     c_conf1 = rep(NA, n)
     # range of c #
-    cup = max(Y[Z==1]) - min(Y[Z==0]) + 0.01
-    cdown = min(Y[Z==1]) - max(Y[Z==0]) - 0.01
-    cmid = (cup+cdown)/2
     
     for(k in n:(n-mn)){
       up = unlist(min_stat_block(Z,Y,block,k,cdown,method.list.all,opt.method, ties))

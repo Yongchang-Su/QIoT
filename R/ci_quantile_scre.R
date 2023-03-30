@@ -38,13 +38,13 @@ ci_quantile_scre <- function(Z, Y, block, quantiles = NULL, alternative = "less"
   }
   if(alternative == "lower"){
     UB = block_conf_quant_larger(Z, -Y, block, quantiles, method.list.all, opt.method, ties, stat.null, switch, null.max,  alpha)
-    res$LB = -rev(UB)
+    res$UB = -rev(UB)
   }
   if(alternative == "two.sided"){
     LB = block_conf_quant_larger(Z, Y, block, quantiles, method.list.all, opt.method, ties, stat.null, switch, null.max,  alpha/2)
     res$LB = LB    
     UB = block_conf_quant_larger(Z, -Y, block, quantiles, method.list.all, opt.method, ties, stat.null, switch, null.max,  alpha/2)
-    res$LB = -rev(UB)    
+    res$UB = -rev(UB)    
   }else{
     warnings("Invalid input for alternative")
   }
