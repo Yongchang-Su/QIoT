@@ -59,6 +59,6 @@ n = length(Z)
 method.list.all = list()
 method.list.all[[1]] = list(name = "Wilcoxon") 
 ### Calculate 90\% confidence intervals for the top 10 percent largest treatment effects under Gamma = 3.
-CIs = ci_quantile_sen(Z,Y,block,gam=3,quantiles=floor(0.9*n):n,alternative = "two.sided",method.list.all=method.list.all,opt.method = "Greedy", switch = TRUE, null.max=10^5)
+CIs = ci_quantile_sen(Z,Y,block,gam=3,quantiles=floor(0.9*n):n,alternative = "two.sided",method.list.all=method.list.all,opt.method = "Greedy", switch = TRUE, confidence = 0.9)
 
 }
