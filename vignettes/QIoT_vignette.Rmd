@@ -3,6 +3,15 @@ title: "QIoT_vignette"
 output: pdf_document
 vignette: "%\\VignetteIndexEntry{QIoT_vignette} %\\VignetteEngine{knitr::rmarkdown}
   %\\VignetteEncoding{UTF-8}\n"
+header-includes:
+ \usepackage{booktabs}
+ \usepackage{longtable}
+ \usepackage{array}
+ \usepackage{multirow}
+ \usepackage[table]{xcolor}
+ \usepackage{wrapfig}
+ \usepackage{float}
+ \floatplacement{figure}{H}
 ---
 
 The vignette is intended to show how to use this package to do simple inference with some examples. The code also serves as an approach to replicate the results in our paper. 
@@ -16,11 +25,11 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width=6, fig.height=6
 
 The installation of our QIoT package requires the help from package devtools. You can follow the code below.
 
-```{r,results==FALSE}
+```{r, echo=TRUE, include = FALSE, warning=FALSE}
 
 library(gurobi)
 library(devtools)
-install_github("Yongchang-Su/QIoT", build_vignettes = TRUE)
+install_github("Yongchang-Su/QIoT",force = TRUE)
 library(QIoT)
 ```
 
@@ -46,9 +55,11 @@ One important contribution of our paper is that we can obtain simultaneous confi
 
 ```{r}
 
-LB_switch = QIoT::ci_quantile_scre(Z,Y,block,method.list.all=method.list.all,opt.method = "Greedy", switch = TRUE, null.max=10^5)$LB
+LB_switch = ci_quantile_scre(Z,Y,block,method.list.all=method.list.all,
+                            opt.method = "Greedy", switch = TRUE, null.max=10^5)$LB
 
-LB_noswitch = QIoT::ci_quantile_scre(Z,Y,block,method.list.all=method.list.all,opt.method = "Greedy", switch = FALSE, null.max=10^5)$LB
+LB_noswitch = ci_quantile_scre(Z,Y,block,method.list.all=method.list.all,
+                            opt.method = "Greedy", switch = FALSE, null.max=10^5)$LB
 
 ```
 
@@ -58,11 +69,14 @@ LB_noswitch = QIoT::ci_quantile_scre(Z,Y,block,method.list.all=method.list.all,o
 Below is the visual results of confidence region for quantiles of treatment effect. The points are the lower limits of one-sided confidence intervals. For this specific case, we are 90% confident that all treatment effects fall to the right side of these points. Based on the plot, it's obvious to conclude that switching labels does promote information utilization, as it gives tighter confidence region.
 
 ```{r}
-plot(LB_switch[LB_switch>-Inf], (1:length(LB_switch))[LB_switch>-Inf], type = "p", xlim = c(-1.5, 1), xlab = "c", ylab = "k", cex = 0.5)
-points(LB_noswitch[LB_noswitch>-Inf], (1:length(LB_noswitch))[LB_noswitch>-Inf], cex = 0.5, col = "grey")
+plot(LB_switch[LB_switch>-Inf], (1:length(LB_switch))[LB_switch>-Inf], type = "p",
+     xlim = c(-1.5, 1), xlab = "c", ylab = "k", cex = 0.5)
+points(LB_noswitch[LB_noswitch>-Inf], (1:length(LB_noswitch))[LB_noswitch>-Inf]
+       , cex = 0.5, col = "grey")
 
 abline(v = 0, lty = 2)
-legend("topleft", pch = 1, col = c("black", "grey"),legend = c("switching labels", "no switching"))
+legend("topleft", pch = 1, col = c("black", "grey"),
+       legend = c("switching labels", "no switching"))
 ```
 
 
@@ -81,7 +95,8 @@ gam = 1
 for(quant in 0.65 + 0.05*(1:7)){
   k = floor(quant * length(Z))
   while(1){
-    pval = QIoT::pval_quantile_sen(Z, Y, block, k, 0, gam=gam, method.list.all=method.list.all, ties = "upper", switch = TRUE)$upper
+    pval = pval_quantile_sen(Z, Y, block, k, 0, gam=gam, 
+                method.list.all=method.list.all, ties = "upper", switch = TRUE)$upper
     if(pval > 0.1){
       
       gammas[enum] = max(gam - 0.1, 1)
@@ -89,7 +104,6 @@ for(quant in 0.65 + 0.05*(1:7)){
       break
     }
     gam = gam + 0.1
-    print(gam)
   }
 }
 print(gammas)
@@ -103,14 +117,17 @@ print(gammas)
 CIlist = list()
 for(i in 1:7){
   gam = gammas[i]
-  CIlist[[i]] = QIoT::ci_quantile_sen(Z, Y, block, gam=gam, method.list.all=method.list.all,switch = TRUE)
+  CIlist[[i]] = ci_quantile_sen(Z, Y, block, gam=gam, 
+                          method.list.all=method.list.all,switch = TRUE)$LB
 }
 ```
 
 ```{r}
-plot(CIlist[[1]][CIlist[[1]]>-Inf], (1:length(CIlist[[1]]))[CIlist[[1]]>-Inf], type = "p", xlim = c(-0.5, 1), xlab = "c", ylab = "k", cex = 0.5)
+plot(CIlist[[1]][CIlist[[1]]>-Inf], (1:length(CIlist[[1]]))[CIlist[[1]]>-Inf], 
+     type = "p", xlim = c(-0.5, 1), xlab = "c", ylab = "k", cex = 0.5)
 for(i in 2:7){
-  points(CIlist[[i]][CIlist[[i]]>-Inf], (1:length(CIlist[[i]]))[CIlist[[i]]>-Inf], cex = 0.5, col = i) 
+  points(CIlist[[i]][CIlist[[i]]>-Inf], (1:length(CIlist[[i]]))[CIlist[[i]]>-Inf],
+         cex = 0.5, col = i) 
 }
 
 abline(v = 0, lty = 2)
@@ -142,7 +159,8 @@ block = rep(1:S, each = n)
 
 method.list.all = list()
 method.list.all[[1]] = list(name = "Stephenson", s=4)
-pval_quantile_sen(Z, Y, block, k, 0, gam=gam, method.list.all=method.list.all, switch = TRUE)$upper
+pval_quantile_sen(Z, Y, block, k, 0, gam=gam, 
+                method.list.all=method.list.all, switch = TRUE)$upper
 
 sw = rep(0,10)
 no_sw = rep(0,10)
@@ -150,10 +168,12 @@ rep_time = 100
 for(i in 1:rep_time){
   Y = rnorm(S*n) + Z
   for(j in 1:10){
-    if(QIoT::pval_quantile_sen(Z,Y,block,floor(0.95*N),0, gam=1+0.1*(j-1),method.list.all=method.list.all)$lower<0.1){
+    if(pval_quantile_sen(Z,Y,block,floor(0.95*N),0,gam=1+0.1*(j-1),
+                         method.list.all=method.list.all)$lower<0.1){
       no_sw[j] = no_sw[j] + 1
     }
-    if(QIoT::pval_quantile_sen(Z,Y,block,floor(0.95*N),0, gam=1+0.1*(j-1),method.list.all=method.list.all,switch = TRUE)$lower<0.1){
+    if(pval_quantile_sen(Z,Y,block,floor(0.95*N),0, gam=1+0.1*(j-1),
+                         method.list.all=method.list.all,switch = TRUE)$lower<0.1){
       sw[j] = sw[j] + 1
     }
   }
@@ -163,3 +183,5 @@ for(i in 1:rep_time){
 power = rbind(sw, no_sw)/rep_time
 colnames(power) = 1+(0:9)*0.1
 print(power)
+```
+
