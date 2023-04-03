@@ -32,7 +32,7 @@ The first thing to do is to load the data and specify the ranking method your wa
 ```{r}
 data("cadmium")
 Y = cadmium$cadmium
-block = cadmium$mset
+block = as.factor(cadmium$mset)
 Z = cadmium$z
 method.list.all = list()
 method.list.all[[1]] = list(name = "Wilcoxon")
@@ -46,9 +46,9 @@ One important contribution of our paper is that we can obtain simultaneous confi
 
 ```{r}
 
-LB_switch = QIoT::ci_quantile_scre(Z,Y,block,method.list.all=method.list.all,opt.method = "Greedy", switch = TRUE, null.max=10^5)
+LB_switch = QIoT::ci_quantile_scre(Z,Y,block,method.list.all=method.list.all,opt.method = "Greedy", switch = TRUE, null.max=10^5)$LB
 
-LB_noswitch = QIoT::ci_quantile_scre(Z,Y,block,method.list.all=method.list.all,opt.method = "Greedy", switch = FALSE, null.max=10^5)
+LB_noswitch = QIoT::ci_quantile_scre(Z,Y,block,method.list.all=method.list.all,opt.method = "Greedy", switch = FALSE, null.max=10^5)$LB
 
 ```
 
@@ -76,16 +76,34 @@ Here we first figure out the corresponding $\Gamma$'s to 70%, 75%, $\ldots$, 100
 gammas = rep(0, 7)
 enum = 1
 gam = 1
+#### Performing switching label trick.
+B = length(levels(block))
+nb = rep(NA, B)
+zb = rep(NA, B)
+for(i in 1:B){
+  nb[i] = sum(block == levels(block)[i])
+  zb[i] = sum(Z[block == levels(block)[i]])
+}   
+for(i in 1:B){
+  if(zb[i]<nb[i]/2){
+    Z[block == levels(block)[i]] = 1 - Z[block == levels(block)[i]]
+    Y[block == levels(block)[i]] = -Y[block == levels(block)[i]]
+  } 
+}
+
+#### Find corresponding gammas
 for(quant in 0.65 + 0.05*(1:7)){
   k = floor(quant * length(Z))
   while(1){
-    pval = QIoT::pval_quantile_sen(Z, Y, block, k, 0, gam=gam, method.list.all=method.list.all, switch = TRUE)$upper
+    pval = QIoT::pval_quantile_sen(Z, Y, block, k, 0, gam=gam, method.list.all=method.list.all, ties = "upper")$upper
     if(pval > 0.1){
+      
       gammas[enum] = max(gam - 0.1, 1)
       enum = enum + 1
       break
     }
     gam = gam + 0.1
+    print(gam)
   }
 }
 print(gammas)

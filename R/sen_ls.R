@@ -46,7 +46,7 @@ sen_ls = function(Z,Y,block,k,c,gam,method.list.all,opt.method="Greedy", ties = 
     u = u + m$u
     v = v + m$v
   }
-  #}
+  }
   pval = list()
   if("upper" %in% ties){
     stat = min_stat_block(Z, Y, block, k = k, c, method.list.all, opt.method = opt.method, ties = c("lower"))
