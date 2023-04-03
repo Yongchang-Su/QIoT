@@ -11,6 +11,7 @@
 #' @param method.list.all A list that contains the type of the rank scores. It should be a list with length equal to the number of strata. Default is \code{NULL}.
 #' @param opt.method Algorithm that is used for optimization. Available algorithms are \code{"Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi"}. Gurobi installation is required for gurobi to be used. Default is \code{"Greedy"}.
 #' @param ties A subvector of \code{c("upper", "lower", "fix")} indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function. Default is \code{c("upper", "lower", "fix")}.
+#' @param switch Logical variable. If true, the function uses switching treatment and control label is the number of treated units is less than that of control units in one stratum. Default is "False".
 #' @returns A list contains upper and lower bound and a special value of $p$-values depending on the tie-dealing method.
 #' @examples 
 #' data("cadmium")
@@ -21,18 +22,18 @@
 #' method.list.all = list()
 #' method.list.all[[1]] = list(name = "Wilcoxon") 
 #' ### Test null hypothesis that 90% quantile of treatment effects is less than or equal to 0 under Gamma = 3.
-#' p1 = pval_quantile_sen(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=0, gam = 3, method.list.all=method.list.all)
+#' p1 = pval_quantile_sen(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=0, gam = 3, method.list.all=method.list.all,switch=TRUE)
 #' ### Test null hypothesis that 90% quantile of treatment effects is greater than or equal to 1 under Gamma = 3.
-#' p2 = pval_quantile_sen(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=1,alternative="greater",gam=3,method.list.all=method.list.all)
+#' p2 = pval_quantile_sen(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=1,alternative="greater",gam=3,method.list.all=method.list.all,switch=TRUE)
 
 #' @export
 
 
-pval_quantile_sen = function(Z,Y,block,k,c,alternative = "less", gam = 1, method.list.all = NULL, opt.method="Greedy", ties = c("upper", "lower", "fix")){
+pval_quantile_sen = function(Z,Y,block,k,c,alternative = "less", gam = 1, method.list.all = NULL, opt.method="Greedy", ties = c("upper", "lower", "fix"), switch = FALSE){
   n = length(Z)
   if(alternative == "two.sided"){
-    pval1 = sen_ls(Z, Y, block, k, c, gam, method.list.all, opt.method, ties)
-    pval2 = sen_ls(Z, -Y, block, n+1-k, -c, gam, method.list.all, opt.method)
+    pval1 = sen_ls(Z, Y, block, k, c, gam, method.list.all, opt.method, ties, switch)
+    pval2 = sen_ls(Z, -Y, block, n+1-k, -c, gam, method.list.all, opt.method, switch)
     pval = list()
     if("upper" %in% ties){
       pval$upper = 2*min(pval1$upper, pval2$upper)
@@ -49,13 +50,15 @@ pval_quantile_sen = function(Z,Y,block,k,c,alternative = "less", gam = 1, method
     Y = -Y
     k = n + 1 - k
     c = -c
-    pval = sen_ls(Z, Y, block, k, c, gam, method.list.all, opt.method, ties)
+    pval = sen_ls(Z, Y, block, k, c, gam, method.list.all, opt.method, ties, switch)
+    return(pval)
   }else if(alternative == "less"){
-    pval = sen_ls(Z, Y, block, k, c, gam, method.list.all, opt.method, ties)
+    pval = sen_ls(Z, Y, block, k, c, gam, method.list.all, opt.method, ties, switch)
+    return(pval)
   }else{
     warnings("Invalid input for alternative")
   }
   
-  return(pval)
+  
   
 }

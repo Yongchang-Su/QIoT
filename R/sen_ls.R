@@ -3,7 +3,7 @@
 #' @keywords internal
 
 
-sen_ls = function(Z,Y,block,k,c,gam,method.list.all,opt.method="Greedy", ties = c("upper", "lower", "fix")){
+sen_ls = function(Z,Y,block,k,c,gam,method.list.all,opt.method="Greedy", ties = c("upper", "lower", "fix"), swtch = TRUE){
   if(!is.factor(block)){
     block = as.factor(block)
   } 
@@ -16,26 +16,26 @@ sen_ls = function(Z,Y,block,k,c,gam,method.list.all,opt.method="Greedy", ties = 
   }   
   u = 0
   v = 0
-  # if(switch){
-  #   for(i in 1:B){
-  #     if(zb[i]<nb[i]/2){
-  #       Z[block == levels(block)[i]] = 1 - Z[block == levels(block)[i]]
-  #       Y[block == levels(block)[i]] = -Y[block == levels(block)[i]]
-  #     } 
-  #   }
-  #   for(i in 1:B){
-  #     if(length(method.list.all)==1){
-  #       method.list = method.list.all[[1]]
-  #     }else{
-  #       method.list = method.list.all[[i]]
-  #     }
-  #     r = rank_score(nb[i], method.list)
-  #     m = max_mv(-r, gam)
-  #     u = u + m$u
-  #     v = v + m$v
-  #     u = u + sum(r)
-  #   }
-  # }else{
+  if(switch){
+    for(i in 1:B){
+      if(zb[i]<nb[i]/2){
+        Z[block == levels(block)[i]] = 1 - Z[block == levels(block)[i]]
+        Y[block == levels(block)[i]] = -Y[block == levels(block)[i]]
+      }
+    }
+    for(i in 1:B){
+      if(length(method.list.all)==1){
+        method.list = method.list.all[[1]]
+      }else{
+        method.list = method.list.all[[i]]
+      }
+      r = rank_score(nb[i], method.list)
+      m = max_mv(-r, gam)
+      u = u + m$u
+      v = v + m$v
+      u = u + sum(r)
+    }
+  }else{
   for(i in 1:B){
     if(length(method.list.all)==1){
       method.list = method.list.all[[1]]

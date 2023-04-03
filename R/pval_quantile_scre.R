@@ -11,6 +11,7 @@
 #' @param opt.method Algorithm that is used for optimization. Available algorithms are \code{"Greedy", "DP", "Mcknap", "LP", "ILP" and "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi"}. Gurobi installation is required for gurobi to be used. Default is \code{"Greedy"}.
 #' @param ties A subvector of \code{c("upper", "lower", "fix")} indicating which tie-dealing methods we use to calculate statistics. "upper" will use the method that will produce maximum statistic, while "lower" will get minimum. "fix" however will order the ties the same way as "first" method in rank function. Default is \code{c("upper", "lower", "fix")}.
 #' @param null.max The total amount of values we use to approximate the null distribution. Default is \code{1e5}.
+#' @param switch Logical variable. If true, the function uses switching treatment and control label is the number of treated units is less than that of control units in one stratum. Default is "False".
 #' @returns A list contains upper and lower bound and a special value of $p$-values depending on the tie-dealing method.
 #' @examples
 #' data("cadmium")
@@ -21,14 +22,31 @@
 #' method.list.all = list()
 #' method.list.all[[1]] = list(name = "Wilcoxon") 
 #' ### Test null hypothesis that 90% quantile of treatment effects is less than or equal to 0.
-#' p1 = pval_quantile_scre(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=0,method.list.all=method.list.all)
+#' p1 = pval_quantile_scre(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=0, method.list.all=method.list.all,switch=TRUE)
 #' ### Test null hypothesis that 90% quantile of treatment effects is greater than or equal to 1.
-#' p2 = pval_quantile_scre(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=1,alternative="greater",method.list.all=method.list.all)
+#' p2 = pval_quantile_scre(Z=Z,Y=Y,block=block,k=floor(0.9*length(Y)),c=1,alternative="greater", method.list.all=method.list.all,switch=TRUE)
 #' @export
 
 
-pval_quantile_scre <- function(Z, Y, block, k, c, alternative = "less", method.list.all = NULL, opt.method = "Greedy", ties = c("upper", "lower", "fix"), null.max = 10^5 ){
+pval_quantile_scre <- function(Z, Y, block, k, c, alternative = "less", method.list.all = NULL, opt.method = "Greedy", ties = c("upper", "lower", "fix"), null.max = 10^5, switch = FALSE ){
+  block = as.factor(block)
   n = length(Y)
+  if(switch){
+    B = length(levels(block))
+    nb = rep(NA, B)
+    zb = rep(NA, B)
+    for(i in 1:B){
+      nb[i] = sum(block == levels(block)[i])
+      zb[i] = sum(Z[block == levels(block)[i]])
+    }   
+    for(i in 1:B){
+      if(zb[i]<nb[i]/2){
+        Z[block == levels(block)[i]] = 1 - Z[block == levels(block)[i]]
+        Y[block == levels(block)[i]] = -Y[block == levels(block)[i]]
+      } 
+    }    
+  }
+
   if(alternative == "two.sided"){
     pval1 = pval_block(Z, Y, block, k, c,method.list.all,opt.method, ties , null.max)
     pval2 = pval_block(Z, -Y, block, n+1-k, -c,method.list.all, opt.method, ties , null.max)
@@ -49,8 +67,10 @@ pval_quantile_scre <- function(Z, Y, block, k, c, alternative = "less", method.l
     k = n + 1 - k
     c = -c
     pval = pval_block(Z, Y, block, k, c,method.list.all, opt.method, ties , null.max)
+    return(pval)
   }else if(alternative == "less"){
     pval = pval_block(Z, Y, block, k, c,method.list.all, opt.method, ties , null.max)
+    return(pval)
   }else{
     warnings("Invalid input for alternative")
   }
