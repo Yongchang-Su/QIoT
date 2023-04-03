@@ -76,26 +76,12 @@ Here we first figure out the corresponding $\Gamma$'s to 70%, 75%, $\ldots$, 100
 gammas = rep(0, 7)
 enum = 1
 gam = 1
-#### Performing switching label trick.
-B = length(levels(block))
-nb = rep(NA, B)
-zb = rep(NA, B)
-for(i in 1:B){
-  nb[i] = sum(block == levels(block)[i])
-  zb[i] = sum(Z[block == levels(block)[i]])
-}   
-for(i in 1:B){
-  if(zb[i]<nb[i]/2){
-    Z[block == levels(block)[i]] = 1 - Z[block == levels(block)[i]]
-    Y[block == levels(block)[i]] = -Y[block == levels(block)[i]]
-  } 
-}
 
 #### Find corresponding gammas
 for(quant in 0.65 + 0.05*(1:7)){
   k = floor(quant * length(Z))
   while(1){
-    pval = QIoT::pval_quantile_sen(Z, Y, block, k, 0, gam=gam, method.list.all=method.list.all, ties = "upper")$upper
+    pval = QIoT::pval_quantile_sen(Z, Y, block, k, 0, gam=gam, method.list.all=method.list.all, ties = "upper", switch = TRUE)$upper
     if(pval > 0.1){
       
       gammas[enum] = max(gam - 0.1, 1)
