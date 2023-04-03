@@ -48,11 +48,13 @@ pval_quantile_scre <- function(Z, Y, block, k, c, alternative = "less", method.l
     Y = -Y
     k = n + 1 - k
     c = -c
-    
+    pval = pval_block(Z, Y, block, k, c,method.list.all, opt.method, ties , null.max)
+  }else if(alternative == "less"){
+    pval = pval_block(Z, Y, block, k, c,method.list.all, opt.method, ties , null.max)
   }else{
     warnings("Invalid input for alternative")
   }
-  pval = pval_block(Z, Y, block, k, c,method.list.all, opt.method, ties , null.max)
+  
   return(pval)
   
 }

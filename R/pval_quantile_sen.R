@@ -49,11 +49,13 @@ pval_quantile_sen = function(Z,Y,block,k,c,alternative = "less", gam = 1, method
     Y = -Y
     k = n + 1 - k
     c = -c
-    
+    pval = sen_ls(Z, Y, block, k, c, gam, method.list.all, opt.method, ties)
+  }else if(alternative == "less"){
+    pval = sen_ls(Z, Y, block, k, c, gam, method.list.all, opt.method, ties)
   }else{
     warnings("Invalid input for alternative")
   }
-  pval = sen_ls(Z, Y, block, k, c, gam, method.list.all, opt.method, ties)
+  
   return(pval)
   
 }
