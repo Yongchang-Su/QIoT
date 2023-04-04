@@ -9,7 +9,7 @@ ci_quantile_scre(
   Y,
   block,
   quantiles = NULL,
-  alternative = "less",
+  alternative = "upper",
   method.list.all = NULL,
   opt.method = "Greedy",
   ties = "fix",

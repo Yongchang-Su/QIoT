@@ -13,9 +13,11 @@ LinkingTo: Rcpp, RcppArmadillo
 Suggests: 
     gurobi,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 RoxygenNote: 7.2.1
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
 LazyData: true
+Config/testthat/edition: 3

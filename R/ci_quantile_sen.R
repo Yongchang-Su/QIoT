@@ -29,6 +29,11 @@
 #' @export
 
 ci_quantile_sen <- function(Z, Y, block, gam = 1, quantiles=NULL,alternative = "upper", method.list.all = NULL, opt.method = 'Greedy', ties = "fix",switch = FALSE, confidence = 0.9){
+  if(!is.vector(Z, mode = "integer")){stop("Z should be a binary vector")}
+  if(!(alternative %in% c("less", "greater", "two.sided"))){stop("Invalid input for alternative")}
+  if(!is.list(method.list.all)){stop("method.list.all should be a list")}
+  if(!(opt.method %in% c("Greedy", "DP", "Mcknap", "LP", "ILP", "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi"))){stop("Invalid input for opt.method")}
+  
   alpha = 1 - confidence
   res = list()
   if(alternative == "upper"){

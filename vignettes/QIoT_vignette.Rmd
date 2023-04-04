@@ -8,7 +8,6 @@ header-includes:
  \usepackage{longtable}
  \usepackage{array}
  \usepackage{multirow}
- \usepackage[table]{xcolor}
  \usepackage{wrapfig}
  \usepackage{float}
  \floatplacement{figure}{H}
@@ -25,12 +24,9 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width=6, fig.height=6
 
 The installation of our QIoT package requires the help from package devtools. You can follow the code below.
 
-```{r, echo=TRUE, include = FALSE, warning=FALSE}
-
-library(gurobi)
+```{r echo=T,eval=FALSE}
 library(devtools)
 install_github("Yongchang-Su/QIoT",force = TRUE)
-library(QIoT)
 ```
 
 
@@ -39,6 +35,7 @@ library(QIoT)
 The first thing to do is to load the data and specify the ranking method your want to apply. Here we simply use Wilcoxon rank sum statistics for all strata.
 
 ```{r}
+library(QIoT)
 data("cadmium")
 Y = cadmium$cadmium
 block = as.factor(cadmium$mset)
