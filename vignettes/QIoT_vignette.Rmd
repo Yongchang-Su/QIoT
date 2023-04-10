@@ -3,14 +3,6 @@ title: "QIoT_vignette"
 output: pdf_document
 vignette: "%\\VignetteIndexEntry{QIoT_vignette} %\\VignetteEngine{knitr::rmarkdown}
   %\\VignetteEncoding{UTF-8}\n"
-header-includes:
- \usepackage{booktabs}
- \usepackage{longtable}
- \usepackage{array}
- \usepackage{multirow}
- \usepackage{wrapfig}
- \usepackage{float}
- \floatplacement{figure}{H}
 ---
 
 The vignette is intended to show how to use this package to do simple inference with some examples. The code also serves as an approach to replicate the results in our paper. 
@@ -110,6 +102,7 @@ print(gammas)
 
 ##### Calculate CIs for those $\Gamma$'s
 
+
 ```{r}
 CIlist = list()
 for(i in 1:7){
@@ -118,6 +111,7 @@ for(i in 1:7){
                           method.list.all=method.list.all,switch = TRUE)$LB
 }
 ```
+
 
 ```{r}
 plot(CIlist[[1]][CIlist[[1]]>-Inf], (1:length(CIlist[[1]]))[CIlist[[1]]>-Inf], 

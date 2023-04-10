@@ -29,7 +29,6 @@
 
 
 pval_quantile_scre <- function(Z, Y, block, k, c, alternative = "less", method.list.all = NULL, opt.method = "Greedy", ties = c("upper", "lower", "fix"), null.max = 10^5, switch = FALSE ){
-  if(!is.vector(Z, mode = "integer")){stop("Z should be a binary vector")}
   if(!(alternative %in% c("less", "greater", "two.sided"))){stop("Invalid input for alternative")}
   if(!is.list(method.list.all)){stop("method.list.all should be a list")}
   if(!(opt.method %in% c("Greedy", "DP", "Mcknap", "LP", "ILP", "LP_gurobi", "ILP_gurobi", "PWL_gurobi", "PWLint_gurobi"))){stop("Invalid input for opt.method")}  
